@@ -46,3 +46,5 @@ Contributors
 [HimmyCircle](https://github.com/HimmyCircle)
 [darkzydark](https://github.com/darkzydark)
 ChengFeng
+
+Copyright Reserved
