@@ -45,6 +45,4 @@ Contributors
 [JoeyWNK](https://github.com/JoeyWNK)
 [HimmyCircle](https://github.com/HimmyCircle)
 [darkzydark](https://github.com/darkzydark)
-ChengFeng
-
-Copyright Reserved
+[ChengFeng](https://github.com/cfeng01)
