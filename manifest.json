@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+
+  "name": "__MSG_extName__",
+  "default_locale": "en",
+  "description": "This extension add support to aria2",
+  "version": "0.1",
+  "icons": {
+    "96":"img/icon96.png"
+  },
+  "browser_action": {
+    "default_title": "__MSG_extName__",
+    "default_popup": "popup.html",
+    "default_icon": "img/action_icon.png"
+  },
+  "background": {
+    "page": "main.html"
+  },
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "<all_urls>"
+  ]
+}

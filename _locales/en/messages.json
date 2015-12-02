@@ -1,0 +1,11 @@
+{
+  "extName":{
+    "message": "Aria2 Download",
+    "description":"Extension name"
+  },
+  "noTask": {
+    "message": "No Task",
+    "description": "There is no task"
+  }
+
+}

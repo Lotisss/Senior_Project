@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!--
+ * Under No Licence, for commercial usage please contact the author
+-->
+<html lang="en">
+<head>
+    <title>Arial 2 Download</title>
+    <meta charset="utf-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/mainstyle.css"/>
+</head>
+<body>
+<div class="container">
+    <!--Modals-->
+    <div class="modal fade" id="modalSettings" tabindex="-1" role="dialog" aria-labelledby="modalSettings">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="Settings">Settings</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="SettingTop">
+                        <div class="row">Refresh
+                            <div class="btn-group marginRight" data-toggle="buttons" role="group"
+                                 aria-label="group">
+                                <label class="btn btn-primary active">
+                                    <input type="radio" name="options" id="option1" autocomplete="off" checked> 1s
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input type="radio" name="options" id="option2" autocomplete="off"> 5s
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input type="radio" name="options" id="option3" autocomplete="off"> 10s
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input type="radio" name="options" id="option4" autocomplete="off"> 1min
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input type="radio" name="options" id="option5" autocomplete="off"> off
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row"> Notification
+                            <div class="btn-group marginRight" data-toggle="buttons" role="group"
+                                 aria-label="group">
+                                <label class="btn btn-primary active">
+                                    <input type="radio" name="options" id="NotificationOn" autocomplete="off"
+                                           checked>enabled
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input type="radio" name="options" id="NotificationOff" autocomplete="off">disabled
+                                </label>
+                            </div>
+                        </div>
+
+                        <br>
+                    </div>
+                    <div id="SettingMid">
+                        <br>
+
+                        <div class="input-group">
+              <span class="input-group-addon" id="SettingbuttomOne">
+                Downlaod speed limit</span>
+                            <input type="text" class="form-control" placeholder="speed limit"
+                                   aria-describedby="SettingbuttomOne">
+                        </div>
+                        <br>
+
+                        <div class="input-group">
+            <span class="input-group-addon" id="SettingbuttomTwo">
+              Upload speed limit</span>
+                            <input type="text" class="form-control" placeholder="speed limit"
+                                   aria-describedby="SettingbuttomTwo">
+                        </div>
+                        <br>
+
+                        <div class="input-group">
+            <span class="input-group-addon" id="SettingbuttomThree">
+              Parallel connection</span>
+                            <input type="text" class="form-control" placeholder="Parallel connection"
+                                   aria-describedby="SettingbuttomThree">
+                        </div>
+                        <br>
+
+                        <div class="input-group">
+            <span class="input-group-addon" id="SettingbuttomFour">
+              Fragment size</span>
+                            <input type="text" class="form-control" placeholder="fragment size"
+                                   aria-describedby="SettingbuttomFour">
+                        </div>
+                        <br>
+
+                        <div class="input-group">
+            <span class="input-group-addon" id="SettingbuttomFive">
+              User Agent</span>
+                            <input type="text" class="form-control" placeholder="user agent"
+                                   aria-describedby="SettingbuttomFive">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalAddTask" tabindex="-1" role="dialog" aria-labelledby="modalSettings">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="AddTask">Add Task</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="input-group">
+                            <input type="text" class="form-control" aria-describedby="basic-addon2">
+          <span class="input-group-btn" id="basic-addon2">
+          <button class="btn btn-warning">upload files</button></span>
+                        </div>
+                    </div>
+                    <div id="addtaskInformation">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="addtaskInformation1">File Name</span>
+                            <input type="text" class="form-control" placeholder="File Name"
+                                   aria-describedby="addtaskInformation1">
+                        </div>
+                        <br>
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="addtaskInformation2">Directory</span>
+                            <input type="text" class="form-control" placeholder="Directory"
+                                   aria-describedby="addtaskInformation2">
+                        </div>
+                        <br>
+                        <!--checkbox-->
+                        <div class="col-lg-2">
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+          <span class="input-group-addon">
+            <input type="checkbox" aria-label="...">
+          </span>
+                                <span class="form-control" aria-label="...">Pause when added</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+          <span class="input-group-addon">
+            <input type="checkbox" aria-label="...">
+          </span>
+                                <span class="form-control" aria-label="...">Parameterized URI</span>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="addtaskInformation4">Spilt</span>
+                            <input type="text" class="form-control" aria-describedby="addtaskInformation4">
+
+                            <span class="input-group-addon" id="addtaskInformation5">Conn/Serv</span>
+                            <input type="text" class="form-control" aria-describedby="addtaskInformation5">
+                        </div>
+                        <br>
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="addtaskInformation6">Seed Ratio</span>
+                            <input type="text" class="form-control" aria-describedby="addtaskInformation6">
+
+                            <span class="input-group-addon" id="addtaskInformation7">Seed Time</span>
+                            <input type="text" class="form-control" aria-describedby="addtaskInformation7">
+                        </div>
+                        <br>
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="addtaskInformation3">Header</span>
+                            <input type="text" class="form-control" placeholder="Header"
+                                   aria-describedby="addtaskInformation3">
+                        </div>
+                        <br>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--BasicParts-->
+    <div id="monitor">
+        <div class="list-group">
+        </div>
+        <div id="controlPanel">
+            <div class="row">
+                <button type="button" id="taskBTNAdd" class="btn btn-primary" data-toggle="modal"
+                        data-target="#modalAddTask">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+                <div class="btn-group">
+                    <button type="button" id="taskBTNStart" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-forward"></i>
+                    </button>
+                    <button type="button" id="taskBTNPause" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-stop"></i>
+                    </button>
+                    <button type="button" id="taskBTNClear" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <button type="button" id="BTNFresh" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-refresh"></i>
+                </button>
+                <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
+                        class="btn btn-primary">
+                    <i class="glyphicon glyphicon-wrench"></i>
+                </button>
+            </div>
+        </div>
+        <div id="speedView">
+            <div id="viewUploadSpeed"><span id="totalUploadSpeed">--KB/s</span><i class="glyphicon glyphicon-open"></i>
+            </div>
+            <div id="viewDownloadSpeed"><span id="totalDownloadSpeed">--KB/s</span><i
+                    class="glyphicon glyphicon-save"></i></div>
+        </div>
+        <div id="copyright">Copyright &copy; 2015 Group #4
+        </div>
+    </div>
+    <div id="rightColumn">
+        <div id="noTask">__MSG_noTask__</div>
+    </div>
+
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+
+</html>
