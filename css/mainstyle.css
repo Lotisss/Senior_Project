@@ -1,0 +1,174 @@
+      
+
+/*主页面的布局*/
+      body{
+        margin:100px;
+      }
+      #leftcolumn{ 
+                   width: 300px;
+                   height: 600px;
+                   margin: auto;
+                   float: left;
+                   border-style: solid;
+                   border-width: 1px;}
+      
+      #button{ text-align: center;
+               margin-top: 10px;}
+      #speed{ text-align: center;
+              padding: 10px;
+              margin: 50px;} 
+      #copyright{ font-size:70%;
+                  text-align: center;
+                  clear: right;
+                  padding-bottom:20px;
+                  margin-top: 10px;}
+
+      #rightcolumn{ 
+                    margin-left: 350px;
+                    width: 900px;
+                    height: 600px;
+                    border-style: solid;
+                    border-width: 1px;}
+      #notask{ text-align: center;
+               line-height: 600px;
+               font-size: 48px;
+               }
+
+      #speed{ 
+        margin: auto;
+        margin-top: 20px;
+              width: 100px;
+              height: 100px;
+              border-radius: 50px;
+              border:1px solid black;
+              }
+      #speedTop{
+        width: 100px;
+        height: 50px;
+        margin-left: -10px;
+      }
+      #speedBottom{
+                width: 100px;
+        height: 50px;
+        margin-left: -10px;
+      }
+
+/*下载列表*/
+      .list-group{
+        height: 300px;
+      }
+
+/*addtask的布局*/
+
+    #addtask{
+      margin-left: 80px;
+      margin-top: 30px;
+      margin-right: 80px;
+    }
+    #addtaskAdd{
+
+      border-bottom: 1px dashed black;
+
+    }
+
+    #addtaskUpload{
+      margin-top: 30px;
+      margin-bottom: 30px;
+      border-bottom: 1px dashed black;
+
+    }
+
+    #addtaskInformation{
+      border-bottom: 1px dashed black;
+    }
+
+    #addtaskButton{
+      margin-top: 30px;
+      float: right;
+    }
+
+/*status的布局*/
+    
+    #status{
+      margin-left: 80px;
+      margin-top: 30px;
+      margin-right: 80px;
+    }
+
+    #basicstatus{
+      height: 100px;
+      border: 1px solid black;
+
+    }
+
+    #specificstatus{
+      margin-top: 30px;
+      height: 400px;
+      border: 1px solid black;
+    }
+
+    #statuslist{
+      width: 550px;
+      margin-top: 50px;
+      margin-left: 50px;
+    }
+
+/*标签的布局*/
+    #projectlabel{
+      width: 80px;
+      float: right;
+    }
+
+    #savebutton{
+      float: right;
+      margin-right: 0;
+    }
+    .list-group {
+      height: 230px !important;
+    }
+
+/*xiao bo*/
+.marginRight {
+  float: right;
+  margin-right: 100px;
+}/*5个单选框*/
+
+#Setting{ margin-top:80px;
+           margin-left:80px;
+           margin-right:80px;
+
+}
+/*right column 下的最大的div*/
+#SettingTop { border-bottom:1px dashed black;
+}
+/*add task 最上方部分*/
+
+#SettingMid { border-bottom:1px dashed black;
+
+}
+
+#SettingBottom { margin-top:30px;
+                 float:right;
+
+}
+#Notification{
+  float:right;
+  margin-right: 150px;
+}
+
+
+/*小博2*/
+.peerbottom1{
+  float:right;
+  margin-right:100px;
+}
+
+#peer1{
+  margin-top:20px;
+  margin-left:20px;
+}
+#optionbottom{
+  margin-top:20px;
+  margin-left:20px;
+
+}
