@@ -2,15 +2,17 @@
 <!--
  * Under No Licence, for commercial usage please contact the author
 -->
-<html lang="en">
+<html lang="en" ng-app>
 <head>
     <title>Arial 2 Download</title>
     <meta charset="utf-8">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/mainstyle.css"/>
+    <link href="css/bootstrap-switch.min.css">
+    <link rel="stylesheet" type="text/css" href="css/mainstyle.css">
 </head>
 <body>
 <div class="container">
+
     <!--Modals-->
     <div class="modal fade" id="modalSettings" tabindex="-1" role="dialog" aria-labelledby="modalSettings">
         <div class="modal-dialog" role="document">
@@ -18,85 +20,78 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="Settings">Settings</h4>
+                    <h3 class="modal-title" id="Settings">Settings <i class="glyphicon glyphicon-wrench"></i></h3>
                 </div>
                 <div class="modal-body">
-                    <div id="SettingTop">
-                        <div class="row">Refresh
-                            <div class="btn-group marginRight" data-toggle="buttons" role="group"
-                                 aria-label="group">
-                                <label class="btn btn-primary active">
-                                    <input type="radio" name="options" id="option1" autocomplete="off" checked> 1s
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="options" id="option2" autocomplete="off"> 5s
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="options" id="option3" autocomplete="off"> 10s
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="options" id="option4" autocomplete="off"> 1min
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="options" id="option5" autocomplete="off"> off
-                                </label>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12"><h4>Extension</h4></div>
+                        <div class="col-xs-4 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">Port</span>
+                                <input type="number" min="1" max="65535" aria-valuemin="1" aria-valuemax="65535"
+                                       class="form-control">
                             </div>
                         </div>
-                        <div class="row"> Notification
-                            <div class="btn-group marginRight" data-toggle="buttons" role="group"
-                                 aria-label="group">
-                                <label class="btn btn-primary active">
-                                    <input type="radio" name="options" id="NotificationOn" autocomplete="off"
-                                           checked>enabled
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="options" id="NotificationOff" autocomplete="off">disabled
-                                </label>
+                        <div class="col-xs-5 col-sm-5">
+                            <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"><i
+                                                class="glyphicon glyphicon-refresh"></i></button>
+                                    </span>
+                                <input type="number" min="1" max="600" aria-valuemin="1" aria-valuemax="600"
+                                       class="form-control"
+                                       aria-label="Fresh Rate">
+                                <span class="input-group-addon">seconds</span>
                             </div>
                         </div>
-
-                        <br>
+                        <div class="col-xs-3 col-sm-3">
+                            <div class="input-group">
+                                <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-bell"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div id="SettingMid">
-                        <br>
-
-                        <div class="input-group">
-              <span class="input-group-addon" id="SettingbuttomOne">
-                Downlaod speed limit</span>
-                            <input type="text" class="form-control" placeholder="speed limit"
-                                   aria-describedby="SettingbuttomOne">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12"><h4>Aria2</h4></div>
+                        <div class="col-xs-5 col-sm-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-download"></i></span>
+                                <input type="number" min="0" aria-valuemin="0" class="form-control"
+                                       aria-label="Fresh Rate">
+                                <span class="input-group-addon">kb/s</span>
+                            </div>
                         </div>
-                        <br>
 
-                        <div class="input-group">
-            <span class="input-group-addon" id="SettingbuttomTwo">
-              Upload speed limit</span>
-                            <input type="text" class="form-control" placeholder="speed limit"
-                                   aria-describedby="SettingbuttomTwo">
+                        <div class="col-xs-5 col-sm-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-upload"></i></span>
+                                <input type="number" min="0" aria-valuemin="0" class="form-control"
+                                       aria-label="Fresh Rate">
+                                <span class="input-group-addon">kb/s</span>
+                            </div>
                         </div>
-                        <br>
-
-                        <div class="input-group">
-            <span class="input-group-addon" id="SettingbuttomThree">
-              Parallel connection</span>
-                            <input type="text" class="form-control" placeholder="Parallel connection"
-                                   aria-describedby="SettingbuttomThree">
+                        <div class="col-xs-6 col-sm-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">Connections</span>
+                                <input type="number" min="1" aria-valuemin="1" class="form-control"
+                                       aria-label="Fresh Rate">
+                                <span class="input-group-addon">per server</span>
+                            </div>
                         </div>
-                        <br>
-
-                        <div class="input-group">
-            <span class="input-group-addon" id="SettingbuttomFour">
-              Fragment size</span>
-                            <input type="text" class="form-control" placeholder="fragment size"
-                                   aria-describedby="SettingbuttomFour">
+                        <div class="col-xs-4 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">Split</span>
+                                <input type="number" min="0" aria-valuemin="0" class="form-control"
+                                       aria-label="Fresh Rate">
+                                <span class="input-group-addon">parts</span>
+                            </div>
                         </div>
-                        <br>
 
-                        <div class="input-group">
-            <span class="input-group-addon" id="SettingbuttomFive">
-              User Agent</span>
-                            <input type="text" class="form-control" placeholder="user agent"
-                                   aria-describedby="SettingbuttomFive">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="input-group">
+                                <span class="input-group-addon">User Agent</span>
+                                <input type="text" class="form-control">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,31 +103,33 @@
         </div>
     </div>
 
-
+    <!-- Add Task Modals -->
     <div class="modal fade" id="modalAddTask" tabindex="-1" role="dialog" aria-labelledby="modalSettings">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="AddTask">Add Task</h4>
+                    <h4 class="modal-title" id="AddTask">Add Task <i class="glyphicon glyphicon-align-right"></i></h4>
                 </div>
                 <div class="modal-body">
-
                     <div class="row">
                         <div class="input-group">
+                            <span class="input-group-addon">URL</span>
                             <input type="text" class="form-control" aria-describedby="basic-addon2">
-          <span class="input-group-btn" id="basic-addon2">
-          <button class="btn btn-warning">upload files</button></span>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary">
+                                    <input type="file" id="fileInputTorrent">Upload Torrent
+                                </button>
+                            </span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">File Name</span>
+                            <input type="text" class="form-control">
                         </div>
                     </div>
                     <div id="addtaskInformation">
-                        <div class="input-group">
-                            <span class="input-group-addon" id="addtaskInformation1">File Name</span>
-                            <input type="text" class="form-control" placeholder="File Name"
-                                   aria-describedby="addtaskInformation1">
-                        </div>
-                        <br>
+
 
                         <div class="input-group">
                             <span class="input-group-addon" id="addtaskInformation2">Directory</span>
@@ -156,7 +153,7 @@
           <span class="input-group-addon">
             <input type="checkbox" aria-label="...">
           </span>
-                                <span class="form-control" aria-label="...">Parameterized URI</span>
+                                <span class="form-control" aria-label="...">Parametrized URI</span>
                             </div>
                         </div>
                         <br>
@@ -199,53 +196,57 @@
     </div>
 
     <!--BasicParts-->
-    <div id="monitor">
-        <div class="list-group">
-        </div>
-        <div id="controlPanel">
-            <div class="row">
-                <button type="button" id="taskBTNAdd" class="btn btn-primary" data-toggle="modal"
-                        data-target="#modalAddTask">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </button>
-                <div class="btn-group">
-                    <button type="button" id="taskBTNStart" class="btn btn-primary">
-                        <i class="glyphicon glyphicon-forward"></i>
+    <div class="row">
+        <div class="col-lg-3 col-xs-3 col-sm-3">
+            <div class="list-group">
+            </div>
+            <div id="controlPanel">
+                <div class="row">
+                    <button type="button" id="taskBTNAdd" class="btn btn-primary" data-toggle="modal"
+                            data-target="#modalAddTask">
+                        <i class="glyphicon glyphicon-plus"></i>
                     </button>
-                    <button type="button" id="taskBTNPause" class="btn btn-primary">
-                        <i class="glyphicon glyphicon-stop"></i>
+                    <div class="btn-group">
+                        <button type="button" id="taskBTNStart" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-forward"></i>
+                        </button>
+                        <button type="button" id="taskBTNPause" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-stop"></i>
+                        </button>
+                        <button type="button" id="taskBTNClear" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" id="BTNFresh" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-refresh"></i>
                     </button>
-                    <button type="button" id="taskBTNClear" class="btn btn-primary">
-                        <i class="glyphicon glyphicon-trash"></i>
+                    <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
+                            class="btn btn-primary">
+                        <i class="glyphicon glyphicon-wrench"></i>
                     </button>
                 </div>
             </div>
-            <div class="row">
-                <button type="button" id="BTNFresh" class="btn btn-primary">
-                    <i class="glyphicon glyphicon-refresh"></i>
-                </button>
-                <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
-                        class="btn btn-primary">
-                    <i class="glyphicon glyphicon-wrench"></i>
-                </button>
+            <div id="speedView">
+                <div id="viewUploadSpeed"><span id="totalUploadSpeed">--KB/s</span><i
+                        class="glyphicon glyphicon-open"></i>
+                </div>
+                <div id="viewDownloadSpeed"><span id="totalDownloadSpeed">--KB/s</span><i
+                        class="glyphicon glyphicon-save"></i></div>
+            </div>
+            <div id="copyright">Copyright &copy; 2015 Group #4
             </div>
         </div>
-        <div id="speedView">
-            <div id="viewUploadSpeed"><span id="totalUploadSpeed">--KB/s</span><i class="glyphicon glyphicon-open"></i>
-            </div>
-            <div id="viewDownloadSpeed"><span id="totalDownloadSpeed">--KB/s</span><i
-                    class="glyphicon glyphicon-save"></i></div>
-        </div>
-        <div id="copyright">Copyright &copy; 2015 Group #4
-        </div>
-    </div>
-    <div id="rightColumn">
-        <div id="noTask">__MSG_noTask__</div>
-    </div>
+        <div class="col-lg-9 col-xs-9 col-sm-9">
+            <div id="noTask"></div>
+        </div></div>
+
 
 </div>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="js/angular.min.js"></script>
 <script src="js/main.js"></script>
 </body>
 

@@ -1,6 +1,19 @@
 /*主页面的布局*/
-body {
+/*body {
     margin: 100px;
+}*/
+.input-group {
+    padding: 10px 0 10px !important;
+}
+#fileInputTorrent {
+    position: absolute;
+    top:0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
 }
 
 #monitor {

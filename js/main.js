@@ -3,3 +3,4 @@
  */
 $("#totalUploadSpeed").text("N/A");
 $("#totalDownloadSpeed").text("N/A");
+//$(".switch").bootstrapSwitch();
