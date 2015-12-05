@@ -200,50 +200,52 @@
         <div class="col-lg-3 col-xs-3 col-sm-3">
             <div class="list-group">
             </div>
-            <div id="controlPanel">
-                <div class="row">
-                    <button type="button" id="taskBTNAdd" class="btn btn-primary" data-toggle="modal"
-                            data-target="#modalAddTask">
-                        <i class="glyphicon glyphicon-plus"></i>
-                    </button>
-                    <div class="btn-group">
-                        <button type="button" id="taskBTNStart" class="btn btn-primary">
-                            <i class="glyphicon glyphicon-forward"></i>
-                        </button>
-                        <button type="button" id="taskBTNPause" class="btn btn-primary">
-                            <i class="glyphicon glyphicon-stop"></i>
-                        </button>
-                        <button type="button" id="taskBTNClear" class="btn btn-primary">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="button" id="BTNFresh" class="btn btn-primary">
-                        <i class="glyphicon glyphicon-refresh"></i>
-                    </button>
-                    <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
-                            class="btn btn-primary">
-                        <i class="glyphicon glyphicon-wrench"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="speedView">
-                <div id="viewUploadSpeed"><span id="totalUploadSpeed">--KB/s</span><i
-                        class="glyphicon glyphicon-open"></i>
-                </div>
-                <div id="viewDownloadSpeed"><span id="totalDownloadSpeed">--KB/s</span><i
-                        class="glyphicon glyphicon-save"></i></div>
-            </div>
-            <div id="copyright">Copyright &copy; 2015 Group #4
-            </div>
+
         </div>
         <div class="col-lg-9 col-xs-9 col-sm-9">
-            <div id="noTask"></div>
-        </div></div>
-
-
+            <div></div>
+        </div>
+    </div>
 </div>
+<footer class="footer">
+    <div class="row controllerView">
+        <button type="button" id="taskBTNAdd" class="btn btn-primary" data-toggle="modal"
+                data-target="#modalAddTask">
+            <i class="glyphicon glyphicon-plus"></i>
+        </button>
+
+        <div class="btn-group">
+            <button type="button" id="taskBTNStart" class="btn btn-primary">
+                <i class="glyphicon glyphicon-forward"></i>
+            </button>
+            <button type="button" id="taskBTNPause" class="btn btn-primary">
+                <i class="glyphicon glyphicon-stop"></i>
+            </button>
+            <button type="button" id="taskBTNClear" class="btn btn-primary">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </div>
+
+        <div class="row controllerView">
+            <button type="button" id="BTNFresh" class="btn btn-primary">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </button>
+            <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
+                    class="btn btn-primary">
+                <i class="glyphicon glyphicon-wrench"></i>
+            </button>
+        </div>
+
+        <div id="speedView">
+            <div id="viewUploadSpeed"><span id="totalUploadSpeed">--KB/s</span><i
+                    class="glyphicon glyphicon-open"></i>
+            </div>
+            <div id="viewDownloadSpeed"><span id="totalDownloadSpeed">--KB/s</span><i
+                    class="glyphicon glyphicon-save"></i></div>
+        </div>
+        <div id="copyRight">Copyright &copy; 2015 Group #4
+        </div>
+</footer>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
