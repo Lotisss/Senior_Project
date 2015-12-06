@@ -2,12 +2,11 @@
 <!--
  * Under No Licence, for commercial usage please contact the author
 -->
-<html lang="en" ng-app>
+<html lang="en">
 <head>
     <title>Arial 2 Download</title>
     <meta charset="utf-8">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-switch.min.css">
     <link rel="stylesheet" type="text/css" href="css/mainstyle.css">
 </head>
 <body>
@@ -27,17 +26,17 @@
                         <div class="col-xs-12 col-sm-12"><h4>Extension</h4></div>
                         <div class="col-xs-4 col-sm-4">
                             <div class="input-group">
-                                <span class="input-group-addon">Port</span>
+                                <label class="input-group-addon" for="settingsPort">Port</label>
                                 <input type="number" min="1" max="65535" aria-valuemin="1" aria-valuemax="65535"
                                        class="form-control" id="settingsPort">
                             </div>
                         </div>
                         <div class="col-xs-5 col-sm-5">
                             <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-primary" id="settingsRefresh"><i
-                                                class="glyphicon glyphicon-refresh"></i></button>
-                                    </span>
+                                <label class="input-group-btn" for="settingsRefreshInput">
+                                    <button type="button" class="btn btn-primary" id="settingsRefresh"><i
+                                            class="glyphicon glyphicon-refresh"></i></button>
+                                </label>
                                 <input type="number" min="1" max="600" aria-valuemin="1" aria-valuemax="600"
                                        class="form-control"
                                        aria-label="Fresh Rate" id="settingsRefreshInput">
@@ -56,41 +55,41 @@
                         <div class="col-xs-12 col-sm-12"><h4>Aria2</h4></div>
                         <div class="col-xs-5 col-sm-5">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-download"></i></span>
+                                <label class="input-group-addon" for="settingsDownload"><i
+                                        class="glyphicon glyphicon-download"></i></label>
                                 <input type="number" min="0" aria-valuemin="0" class="form-control"
-                                       aria-label="Fresh Rate" id="settingsDownload">
+                                       id="settingsDownload">
                                 <span class="input-group-addon">kb/s</span>
                             </div>
                         </div>
 
                         <div class="col-xs-5 col-sm-5">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-upload"></i></span>
-                                <input type="number" min="0" aria-valuemin="0" class="form-control"
-                                       aria-label="Fresh Rate" id="settingsUpload">
+                                <label class="input-group-addon" for="settingsUpload"><i
+                                        class="glyphicon glyphicon-upload"></i></label>
+                                <input type="number" min="0" aria-valuemin="0" class="form-control" id="settingsUpload">
                                 <span class="input-group-addon">kb/s</span>
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6">
                             <div class="input-group">
-                                <span class="input-group-addon">Connections</span>
+                                <label class="input-group-addon" for="settingsConnections">Connections</label>
                                 <input type="number" min="1" aria-valuemin="1" class="form-control"
-                                       aria-label="Fresh Rate" id="settingsConnections">
+                                       id="settingsConnections">
                                 <span class="input-group-addon">per server</span>
                             </div>
                         </div>
                         <div class="col-xs-4 col-sm-4">
                             <div class="input-group">
-                                <span class="input-group-addon">Split</span>
-                                <input type="number" min="0" aria-valuemin="0" class="form-control"
-                                       aria-label="Fresh Rate" id="settingsSplit">
+                                <label class="input-group-addon" for="settingsSplit">Split</label>
+                                <input type="number" min="0" aria-valuemin="0" class="form-control" id="settingsSplit">
                                 <span class="input-group-addon">parts</span>
                             </div>
                         </div>
 
                         <div class="col-xs-12 col-sm-12">
                             <div class="input-group">
-                                <span class="input-group-addon">User Agent</span>
+                                <label class="input-group-addon" for="settingsAgent">User Agent</label>
                                 <input type="text" class="form-control" id="settingsAgent">
                             </div>
                         </div>
@@ -116,63 +115,60 @@
                 <div class="modal-body">
                     <div class="row"><h4>Basic Information</h4></div>
                     <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">URL</span>
-                            <input type="text" class="form-control" aria-describedby="basic-addon2" id="addTaskURL">
+                        <div class="col-xs-11 col-sm-11">
+                            <div class="input-group">
+                                <label class="input-group-addon" for="addTaskURL">URL</label>
+                                <input type="text" class="form-control" id="addTaskURL">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-primary">
                                     <input type="file" id="fileInputTorrent">Upload Torrent
                                 </button>
                             </span>
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">File Name</span>
-                            <input type="text" class="form-control" id="addTaskFileName">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-addon" for="addTaskFileName">File Name</label>
+                                <input type="text" class="form-control" id="addTaskFileName">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-primary" id="addTaskPause">
                                     <i class="glyphicon glyphicon-pause"></i>
                                 </button>
                             </span>
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="addtaskInformation2">Directory</span>
-                            <input type="text" class="form-control" placeholder="Directory"
-                                   aria-describedby="addtaskInformation2" id="addTaskDirectory">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-addon" for="addTaskDirectory">Directory</label>
+                                <input type="text" class="form-control" placeholder="Directory" id="addTaskDirectory">
+                            </div>
                         </div>
                     </div>
                     <div class="row"><h4>Specific Information</h4></div>
                     <div class="row">
                         <div class="col-xs-5 col-sm-5">
                             <div class="input-group">
-                                <span class="input-group-addon" id="addtaskInformation4">Spilt</span>
-                                <input type="text" class="form-control" aria-describedby="addtaskInformation4"
-                                       id="addTaskSpilt">
+                                <label class="input-group-addon" for="addTaskSpilt">Spilt</label>
+                                <input type="text" class="form-control" id="addTaskSpilt">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6">
                             <div class="input-group">
-                                <span class="input-group-addon" id="addtaskInformation5">Conn/Serv</span>
-                                <input type="text" class="form-control" aria-describedby="addtaskInformation5"
-                                       id="addTaskCS">
+                                <label class="input-group-addon" for="addTaskCS">Conn/Serv</label>
+                                <input type="text" class="form-control" id="addTaskCS">
                             </div>
                         </div>
                         <div class="col-xs-5 col-sm-5">
                             <div class="input-group">
-                                <span class="input-group-addon" id="addtaskInformation6">Seed Ratio</span>
-                                <input type="text" class="form-control" aria-describedby="addtaskInformation6"
-                                       id="addTaskRatio">
+                                <label class="input-group-addon" for="addTaskRatio">Seed Ratio</label>
+                                <input type="text" class="form-control" id="addTaskRatio">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6">
                             <div class="input-group">
-                                <span class="input-group-addon" id="addtaskInformation7">Seed Time</span>
-                                <input type="text" class="form-control" aria-describedby="addtaskInformation7"
-                                       id="addTaskTime">
+                                <label class="input-group-addon" for="addTaskTime">Seed Time</label>
+                                <input type="text" class="form-control" id="addTaskTime">
                             </div>
                         </div>
                         <div class="col-xs-11 col-sm-11">
                             <div class="input-group">
-                                <span class="input-group-addon" id="addtaskInformation3">Header</span>
+                                <label class="input-group-addon" for="addTaskHeader">Header</label>
                                 <textarea class="form-control" id="addTaskHeader"></textarea>
                             </div>
                         </div>
@@ -187,56 +183,106 @@
     </div>
 
     <!--BasicParts-->
-    <div class="row">
-        <div class="col-lg-3 col-xs-3 col-sm-3">
+    <div class="row" style="height: 100%" ng-app="taskPanel" ng-controller="taskListController as taskList">
+        <div class="col-lg-3 col-xs-3 col-sm-3" style="width: 210px; padding-bottom: auto">
             <div class="list-group">
+                <a class="list-group-item" ng-repeat="task in taskList.list" href
+                   ng-click="taskList.setCurrentTask(task)" ng-class="{ active : task.active }">
+                    <h4 class="list-group-item-heading">{{task.name}}</h4>
+
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar"
+                             style="width:{{(task.download/task.total)*100}}%">
+                            {{(task.download/task.total)*100 | number : 2}}%
+                        </div>
+                    </div>
+                </a>
+
             </div>
 
         </div>
-        <div class="col-lg-9 col-xs-9 col-sm-9">
-            <div></div>
+        <div class="col-lg-9 col-xs-9 col-sm-9"
+             ng-controller="taskViewController as taskViewer">
+            <div class="row">
+                <div class="col-lg-10 col-xs-8 col-sm-9 col-md-10">
+                    <div class="panel" ng-show="taskViewer.isTab(1)">
+                        <h4>{{taskViewer.task.name}}</h4>
+                        <ul>
+                            <li>Size: {{taskViewer.task.download}}/{{taskViewer.task.total}}</li>
+                            <li>Status: {{taskViewer.task.state}}</li>
+                            <li>Path: {{taskViewer.task.path}}</li>
+                        </ul>
+                    </div>
+                    <div class="panel" ng-show="taskViewer.isTab(2)">
+                    </div>
+                    <div class="panel" ng-show="taskViewer.isTab(3)">
+                    </div>
+                    <div class="panel" ng-show="taskViewer.isTab(4)">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-xs-4 col-sm-3 col-md-2">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation" ng-class="{ active: taskViewer.isTab(1)}">
+                            <a href ng-click="taskViewer.setTab(1)">Status</a>
+                        </li>
+                        <li role="presentation" ng-class="{ active: taskViewer.isTab(2)}">
+                            <a href ng-click="taskViewer.setTab(2)">Files</a>
+                        </li>
+                        <li role="presentation" ng-class="{ active: taskViewer.isTab(3)}">
+                            <a href ng-click="taskViewer.setTab(3)">Options</a>
+                        </li>
+                        <li role="presentation" ng-class="{ active: taskViewer.isTab(4)}"
+                            ng-show="taskViewer.CurrentTask.isBT">
+                            <a href ng-click="taskViewer.setTab(4)">Peers</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
-<footer class="footer">
-    <div class="row controllerView">
-        <button type="button" id="taskBTNAdd" class="btn btn-primary" data-toggle="modal"
-                data-target="#modalAddTask">
-            <i class="glyphicon glyphicon-plus"></i>
-        </button>
-
-        <div class="btn-group">
-            <button type="button" id="taskBTNStart" class="btn btn-primary">
-                <i class="glyphicon glyphicon-forward"></i>
-            </button>
-            <button type="button" id="taskBTNPause" class="btn btn-primary">
-                <i class="glyphicon glyphicon-stop"></i>
-            </button>
-            <button type="button" id="taskBTNClear" class="btn btn-primary">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-        </div>
-
+    <footer class="footer">
         <div class="row controllerView">
-            <button type="button" id="BTNFresh" class="btn btn-primary">
-                <i class="glyphicon glyphicon-refresh"></i>
+            <button type="button" id="taskBTNAdd" class="btn btn-primary" data-toggle="modal"
+                    data-target="#modalAddTask">
+                <i class="glyphicon glyphicon-plus"></i>
             </button>
-            <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
-                    class="btn btn-primary">
-                <i class="glyphicon glyphicon-wrench"></i>
-            </button>
-        </div>
 
-        <div id="speedView">
-            <div id="viewUploadSpeed"><span id="totalUploadSpeed">--KB/s</span><i
-                    class="glyphicon glyphicon-open"></i>
+            <div class="btn-group">
+                <button type="button" id="taskBTNStart" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-forward"></i>
+                </button>
+                <button type="button" id="taskBTNPause" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-stop"></i>
+                </button>
+                <button type="button" id="taskBTNClear" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
             </div>
-            <div id="viewDownloadSpeed"><span id="totalDownloadSpeed">--KB/s</span><i
-                    class="glyphicon glyphicon-save"></i></div>
+
+            <div class="row controllerView">
+                <button type="button" id="BTNFresh" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-refresh"></i>
+                </button>
+                <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
+                        class="btn btn-primary">
+                    <i class="glyphicon glyphicon-wrench"></i>
+                </button>
+            </div>
+
+            <div id="speedView">
+                <div id="viewUploadSpeed"><span id="totalUploadSpeed">--KB/s</span>
+                    <i class="glyphicon glyphicon-open"></i>
+                </div>
+                <div id="viewDownloadSpeed"><span id="totalDownloadSpeed">--KB/s</span>
+                    <i class="glyphicon glyphicon-save"></i></div>
+            </div>
         </div>
         <div id="copyRight">Copyright &copy; 2015 Group #4
         </div>
-</footer>
+    </footer>
+</div>
+
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
