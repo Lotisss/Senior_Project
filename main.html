@@ -208,7 +208,7 @@
                     <div class="panel" ng-show="taskViewer.isTab(1)">
                         <h4>{{taskViewer.task.name}}</h4>
                         <ul>
-                            <li>Size: {{taskViewer.task.download}}/{{taskViewer.task.total}}</li>
+                            <li>Size: {{taskViewer.task.download|bytes}}/{{taskViewer.task.total|bytes}}</li>
                             <li>Status: {{taskViewer.task.state}}</li>
                             <li>Path: {{taskViewer.task.path}}</li>
                         </ul>
@@ -218,7 +218,7 @@
 
                         <div class="list-group">
                             <a class="list-group-item" ng-repeat="file in taskViewer.task.files" href>
-                                {{file.name + " " +file.download + "/" + file.size}}
+                                {{file.name}} {{file.download|bytes}} / {{file.size|bytes}}
                             </a>
                         </div>
                     </div>
@@ -252,8 +252,8 @@
                         <div class="list-group">
                             <a class="list-group-item" ng-repeat="peer in taskViewer.task.peers" href>
                                 {{peer.ip + " " +peer.client + " (" + peer.progress + "%)"}}
-                                <i class="glyphicon glyphicon-upload"></i>{{peer.upSpeed}}kps
-                                <i class="glyphicon glyphicon-download"></i>{{peer.downSpeed}}kps
+                                <i class="glyphicon glyphicon-upload"></i> {{peer.upSpeed|bytes}}/s
+                                <i class="glyphicon glyphicon-download"></i> {{peer.downSpeed|bytes}}/s
                             </a>
                         </div>
                     </div>
