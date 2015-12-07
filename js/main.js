@@ -49,7 +49,13 @@ $("#totalDownloadSpeed").text("N/A");
             isBT: false,
             state: "active",
             path: "Downloads",
-            files: "file1.mp4"
+            files: [
+                {
+                    name: "file1.txt",
+                    size: 70,
+                    download: 10
+                }
+            ]
         },
         {
             name: "file2",
@@ -59,15 +65,26 @@ $("#totalDownloadSpeed").text("N/A");
                 {
                     ip: "123.3.12.1",
                     client: "Transmitter",
-                    progress: "80%",
-                    upSpeed: "10kps",
-                    downSpeed: "10kps"
+                    progress: 80,
+                    upSpeed: 10,
+                    downSpeed: 10
                 }
             ],
             isBT: true,
             state: "active",
             path: "Downloads",
-            files: "file2.mp4"
+            files: [
+                {
+                    name: "file2.txt",
+                    size: 10,
+                    download: 2
+                },
+                {
+                    name: "file2.zip",
+                    size: 10,
+                    download: 8
+                }
+            ]
         }
     ]
 })();

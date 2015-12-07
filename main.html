@@ -214,44 +214,48 @@
                         </ul>
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(2)">
+                        <h4>{{taskViewer.task.name}}</h4>
+
+                        <div class="list-group">
+                            <a class="list-group-item" ng-repeat="file in taskViewer.task.files" href>
+                                {{file.name + " " +file.download + "/" + file.size}}
+                            </a>
+                        </div>
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(3)">
                         <h4>{{taskViewer.task.name}}</h4>
-                        <div class="row">
-                            <div class="col-xs-7 col-sm-7">
-                                <div class="input-group">
-                                    <label class="input-group-addon" for="optionsDownloadLimit">Download Speed Limit</label>
-                                    <input type="text" class="form-control" id="optionsDownloadLimit">
-                                </div>
-                            </div>
-                            <div class="col-xs-7 col-sm-7">
-                                <div class="input-group">
-                                    <label class="input-group-addon" for="optionsloadLimit">Upload Speed Limit</label>
-                                    <input type="text" class="form-control" id="optionsloadLimit">
-                                </div>
-                            </div>
-                            <div class="col-xs-7 col-sm-7">
-                                <div class="input-group">
-                                    <label class="input-group-addon" for="optionsMaxConnections">Max Connections</label>
-                                    <input type="text" class="form-control" id="optionsMaxConnections">
-                                </div>
-                            </div>
-                            <div class="col-xs-7 col-sm-7">
-                                <div class="input-group">
-                                    <label class="input-group-addon" for="optionsSpilt">Spilt</label>
-                                    <input type="text" class="form-control" id="optionsSpilt">
-                                </div>
-                            </div>
-                            <div class="col-xs-7 col-sm-7">
-                                <div class="input-group">
-                                    <label class="input-group-addon" for="optionsSpiltSize">Spilt Size</label>
-                                    <input type="text" class="form-control" id="optionsSpiltSize">
-                                </div>
-                            </div>
+
+                        <div class="input-group">
+                            <label class="input-group-addon" for="optionsDownloadLimit">Download Speed
+                                Limit</label>
+                            <input type="text" class="form-control" id="optionsDownloadLimit">
                         </div>
-                    </div>
+                        <div class="input-group">
+                            <label class="input-group-addon" for="optionsLoadLimit">Upload Speed Limit</label>
+                            <input type="text" class="form-control" id="optionsLoadLimit">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-group-addon" for="optionsMaxConnections">Max Connections</label>
+                            <input type="text" class="form-control" id="optionsMaxConnections">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-group-addon" for="optionsSpilt">Spilt</label>
+                            <input type="text" class="form-control" id="optionsSpilt">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-group-addon" for="optionsSpiltSize">Spilt Size</label>
+                            <input type="text" class="form-control" id="optionsSpiltSize">
+                        </div>
+
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(4)">
+                        <div class="list-group">
+                            <a class="list-group-item" ng-repeat="peer in taskViewer.task.peers" href>
+                                {{peer.ip + " " +peer.client + " (" + peer.progress + "%)"}}
+                                <i class="glyphicon glyphicon-upload"></i>{{peer.upSpeed}}kps
+                                <i class="glyphicon glyphicon-download"></i>{{peer.downSpeed}}kps
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-2 col-xs-4 col-sm-3 col-md-2">
@@ -272,7 +276,6 @@
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
     <footer class="footer">
@@ -316,7 +319,6 @@
         </div>
     </footer>
 </div>
-
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
