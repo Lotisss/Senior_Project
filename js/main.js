@@ -6,9 +6,7 @@ $("#totalDownloadSpeed").text("N/A");
 //$(".switch").bootstrapSwitch();
 (function () {
     'use strict';
-    var app = angular.module('taskPanel', []);
-
-    app.filter('bytes', function () {
+    angular.module('taskPanel', []).filter('bytes', function () {
         return function (bytes, precision) {
             if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
             if (typeof precision === 'undefined') precision = 1;
@@ -21,16 +19,12 @@ $("#totalDownloadSpeed").text("N/A");
                 return '0 B';
             }
         };
-    });
-
-    app.factory('CurrentTask', function () {
+    }).factory('CurrentTask', function () {
         var current = {};
-        $.extend(current, List[0]);
+        if (List.length)
+            $.extend(current, List[0]);
         return current;
-    });
-
-    app.controller('taskListController', function (CurrentTask) {
-        this.list = [];
+    }).controller('taskListController', function (CurrentTask) {
         this.list = List;
 
         this.setCurrentTask = function (Ntask) {
@@ -39,70 +33,76 @@ $("#totalDownloadSpeed").text("N/A");
                 element.active = false;
             });
             Ntask.active = true;
-        }
+        };
 
-    });
-
-    app.controller('taskViewController', function (CurrentTask) {
+    }).controller('taskViewController', function (CurrentTask) {
         this.tab = 1;
         this.task = CurrentTask;
 
         this.setTab = function (tabN) {
             this.tab = tabN;
         };
-
         this.isTab = function (tabN) {
             return this.tab === tabN;
-        }
+        };
+    }).controller('Aria2Controller', function () {
+
     });
 
-    var List = [
-        {
-            name: "file1",
-            download: 1000206345,
-            total: 7068176341,
-            peers: [],
-            isBT: false,
-            state: "active",
-            path: "Downloads",
-            files: [
-                {
-                    name: "file1.txt",
-                    size: 7068176341,
-                    download: 1000206345
-                }
-            ]
-        },
-        {
-            name: "file2",
-            download: 1084671,
-            total: 2097196,
-            peers: [
-                {
-                    ip: "123.3.12.1",
-                    client: "Transmitter",
-                    progress: 80,
-                    upSpeed: 89797,
-                    downSpeed: 8978
-                }
-            ],
-            isBT: true,
-            state: "active",
-            path: "Downloads",
-            files: [
-                {
-                    name: "file2.txt",
-                    size: 109871,
-                    download: 21987
-                },
-                {
-                    name: "file2.zip",
-                    size: 1019898,
-                    download: 898719
-                }
-            ]
-        }
-    ]
 })();
+var globalSettings = {
+    rpc_secret: "token:secrettoken",
+    host: "localhost",
+    port: 6800
+};
+var List = [
+    {
+        name: "file1",
+        download: 1000206345,
+        total: 7068176341,
+        peers: [],
+        isBT: false,
+        state: "active",
+        path: "Downloads",
+        files: [
+            {
+                name: "file1.txt",
+                size: 7068176341,
+                download: 1000206345
+            }
+        ]
+    },
+    {
+        name: "file2",
+        download: 1084671,
+        total: 2097196,
+        peers: [
+            {
+                ip: "123.3.12.1",
+                client: "Transmitter",
+                progress: 80,
+                upSpeed: 89797,
+                downSpeed: 8978
+            }
+        ],
+        isBT: true,
+        state: "active",
+        path: "Downloads",
+        files: [
+            {
+                name: "file2.txt",
+                size: 109871,
+                download: 21987
+            },
+            {
+                name: "file2.zip",
+                size: 1019898,
+                download: 898719
+            }
+        ]
+    }
+];
 
-
+var ARIA2 = Aria2(globalSettings);
+ARIA2.getVersion();
+ARIA2.tellActive();

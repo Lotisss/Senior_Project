@@ -1,3 +1,5 @@
 # IDEA Configure File #
 *.iml
 .idea/
+/js/lib/aria2re.js
+/js/lib/yaaw.js
