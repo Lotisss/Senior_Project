@@ -37,7 +37,7 @@ var Aria2 = function (settings) {
             });
             $.jsonRPC.batchRequest(commands, {success: success, error: error});
         },
-        addUri: function (uri, options) {
+        addUri: function (uri, options) {//(uris[,options [,position]])
             if (!uri) return false;
             if (!$.isArray(uri)) uri = [uri];
             if (!options) options = {};
@@ -84,8 +84,246 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        tellActive: function (keys) {
+        tellActive: function () {
             ARIA2.request("tellActive", [["gid"]],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        addTorrent: function (torrent) {//(torrent[, uris[[, options[,position]]])
+            ARIA2.request("addTorrent", [torrent],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        addMetalink: function () {//(metalink[, option[, position]])
+            ARIA2.request("addMetalink", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        remove: function () {//(gid)
+            ARIA2.request("remove", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        forceRemove: function () {//(gid)
+            ARIA2.request("forceRemove", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        pause: function () {//(gid)
+            ARIA2.request("pause", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        pauseAll: function () {//(none)
+            ARIA2.request("pauseAll", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        forcePause: function () {//(gid)
+            ARIA2.request("forcePause", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        forcePauseAll: function () {//(none)
+            ARIA2.request("forcePauseAll", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        unpause: function () {//(gid)
+            ARIA2.request("unpause", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        unpause: function () {//(gid)
+            ARIA2.request("unpause", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        unpauseAll: function () {//(none)
+            ARIA2.request("unpauseAll", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        tellStatus: function () {//(gid [, keys])
+            ARIA2.request("tellStatus", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        getUris: function () {//(gid)
+            ARIA2.request("getUris", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        getFiles: function () {//(gid)
+            ARIA2.request("getFiles", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        getPeers: function () {//(gid)
+            ARIA2.request("getPeers", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        getServers: function () {//(gid)
+            ARIA2.request("getServers", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        tellWaiting: function () {//(offset, num[, keys])
+            ARIA2.request("tellWaiting", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        tellStopped: function () {//(offset, num[,keys])
+            ARIA2.request("tellStopped", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        changePosition: function () {//(gid, pos, how)
+            ARIA2.request("changePosition", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        changeUri: function () {//(gid, fileIndex, delUris, addUris[, position])
+            ARIA2.request("changeUri", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        getOption: function () {//(gid)
+            ARIA2.request("getOption", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        changeOption: function () {//(gid, options)
+            ARIA2.request("changeOption", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        removeDownloadResult: function () {//(gid)
+            ARIA2.request("removeDownloadResult", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        getSessionInfo: function () {//(none)
+            ARIA2.request("getSessionInfo", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        shutdown: function () {//(none)
+            ARIA2.request("shutdown", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        forceShutdown: function () {//(none)
+            ARIA2.request("forceShutdown", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        saveSession: function () {//(none)
+            ARIA2.request("saveSession", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        /*multical: function () {//sustem.multical(methods)
+            ARIA2.request("multical", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },*/
+        onDownloadStart: function () {//(event)
+            ARIA2.request("onDownloadStart", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        onDownloadPause: function () {//(event)
+            ARIA2.request("onDownloadPause", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        onDownloadStop: function () {//(event)
+            ARIA2.request("onDownloadStop", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        onDownloadComplete: function () {//(event)
+            ARIA2.request("onDownloadComplete", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        onDownloadError: function () {//(event)
+            ARIA2.request("onDownloadError", [],
+                function (result) {
+                    console.log(result);
+                }
+            )
+        },
+        onBtDownloadComplete: function () {//(event)
+            ARIA2.request("onBtDownloadComplete", [],
                 function (result) {
                     console.log(result);
                 }
