@@ -25,6 +25,10 @@
             else
                 return title;
         }
+    }).filter('time', function (){
+        return function (seconds) {
+            return new Date(1970, 0, 1).setSeconds(seconds);
+        }
     }).factory('CurrentTask', function () {
         var current = {};
         if (List.length)
