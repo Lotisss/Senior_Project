@@ -66,13 +66,14 @@ var Aria2 = function (settings) {
             });
             $.jsonRPC.batchRequest(commands, {success: success, error: error});
         },
-        addUri: function (uri, options) {//todo need trigger
+        addUri: function (uri, options, callback) {//todo need trigger
             if (!uri) return false;
             if (!$.isArray(uri)) uri = [uri];
             if (!options) options = {};
             ARIA2.request("addUri", [uri, options],
                 function (result) {
-                    console.debug(result);
+                    if (result.result)
+                        callback();
                 },
                 function (result) {
                     console.debug(result);

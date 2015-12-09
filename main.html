@@ -117,7 +117,7 @@
                     <div class="row">
                         <div class="col-xs-11 col-sm-11">
                             <form name="addTaskForm" role="form">
-                                <div class="input-group form-group has-feedback">
+                                <div class="input-group form-group" id="addTaskURLGroup">
                                     <label class="input-group-addon" for="addTaskURL">URL</label>
                                     <input type="url" name="url" class="form-control"
                                            id="addTaskURL" required>
@@ -138,8 +138,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label class="input-group-addon" for="addTaskDirectory">Directory</label>
-                                    <input type="text" class="form-control" placeholder="Directory"
-                                           id="addTaskDirectory">
+                                    <input type="text" class="form-control" id="addTaskDirectory">
                                 </div>
                             </form>
                         </div>
@@ -180,7 +179,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" id="addTaskCancel">Cancel</button>
-                    <button type="button" class="btn btn-success" id="addTaskAdd" ng-disabled="addTaskForm.$invalid">
+                    <button type="button" class="btn btn-success" id="addTaskAdd" disabled>
                         Add
                     </button>
                 </div>
@@ -209,11 +208,13 @@
 
         </div>
         <div class="col-lg-9 col-xs-9 col-sm-9"
-             ng-controller="taskViewController as taskViewer">
+             ng-controller="taskViewController as taskViewer" ng-show="taskViewer.task.title">
             <div class="row">
                 <div class="col-lg-10 col-xs-8 col-sm-9 col-md-10">
+                    <h4>{{taskViewer.task.title}} <span class="label label-primary">{{taskViewer.task.eta}}</span> <span
+                            class="label label-primary">{{taskViewer.task.downloadSpeed}}</span></h4>
+
                     <div class="panel" ng-show="taskViewer.isTab(1)">
-                        <h4>{{taskViewer.task.title}}</h4>
                         <ul>
                             <li>Size: {{taskViewer.task.completedLength|bytes}}/{{taskViewer.task.totalLength|bytes}}
                             </li>
@@ -222,7 +223,6 @@
                         </ul>
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(2)">
-                        <h4>{{taskViewer.task.title}}</h4>
 
                         <div class="list-group">
                             <a class="list-group-item" ng-repeat="file in taskViewer.task.files" href>
@@ -231,8 +231,6 @@
                         </div>
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(3)">
-                        <h4>{{taskViewer.task.title}}</h4>
-
                         <div class="input-group">
                             <label class="input-group-addon" for="optionsDownloadLimit">Download Speed
                                 Limit</label>
@@ -257,7 +255,7 @@
 
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(4)">
-                        <h4>{{taskViewer.task.title}}</h4>
+
                         <div class="list-group">
                             <a class="list-group-item" ng-repeat="peer in taskViewer.task.peers" href>
                                 {{peer.ip + " " +peer.client + " (" + peer.progress + "%)"}}
@@ -307,7 +305,7 @@
             </div>
 
             <div class="row controllerView">
-                <button type="button" id="BTNFresh" class="btn btn-primary" ng-click="ARIA2.refresh()">
+                <button type="button" id="BTNFresh" class="btn btn-primary" ng-click>
                     <i class="glyphicon glyphicon-refresh"></i>
                 </button>
                 <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"

@@ -34,6 +34,7 @@
         this.list = List;
 
         this.setCurrentTask = function (Ntask) {
+            CurrentTask.bittorrent = null;
             $.extend(CurrentTask, Ntask);
             this.list.forEach(function (element) {
                 element.active = false;
@@ -105,13 +106,35 @@ var List = [];
  ];
  */
 var ARIA2 = Aria2(globalSettings);
-
+var DB = DBFactory();
 var init = function () {
+    $("#addTaskURL").keyup(function () {
+            var value = $(this).val();
+            var pattern = "((http|ftp|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?";
+            if (value.match(pattern)) {
+                $("#addTaskURLGroup").removeClass("has-error").addClass("has-success");
+                $("#addTaskAdd").prop('disabled', false);
+            } else {
+                $("#addTaskURLGroup").removeClass("has-success").addClass("has-error");
+                $("#addTaskAdd").prop('disabled', true);
+            }
+        }
+    );
+    $("#addTaskAdd").click(function () {
+        var uri = $("#addTaskURL").val();
+        ARIA2.addUri(uri, null, function () {
+            $("#modalAddTask").modal("hide");
+        });
+    });
+    $("#BTNFresh").click(function () {
+        ARIA2.refresh();
+    });
+    ARIA2.getVersion();
+    ARIA2.refresh();
+
+    DB.init(function () {
+        console.log("DB initialized");
+    });
 
 };
-ARIA2.getVersion();
-ARIA2.refresh();
-var DB = DBFactory();
-DB.init(function () {
-    console.log("DB initialized");
-});
+init();
