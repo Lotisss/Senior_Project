@@ -5,9 +5,38 @@
  */
 var Aria2 = function (settings) {
     var jsonrpc_interface = settings.path || "http://localhost:" + settings.port + "/jsonrpc";
+    var active_tasks_snapshot = [], finished_tasks_list = undefined, tasks_cnt_snapshot = "";
+
 
     function default_error(result) {
         console.debug(result);
+    }
+
+    function get_title(result) {
+        var dir = result.dir;
+        var title = "Unknown";
+        if (result.bittorrent && result.bittorrent.info && result.bittorrent.info.name)
+            title = result.bittorrent.info.name;
+        else if (result.files[0].path.replace(
+                new RegExp("^" + dir.replace(/\\/g, "/").replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + "/?"), "").split("/").length) {
+            title = result.files[0].path.replace(new RegExp("^" + dir.replace(/\\/g, "/").replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + "/?"), "").split("/");
+            if (result.bittorrent)
+                title = title[0];
+            else
+                title = title[title.length - 1];
+        } else if (result.files.length && result.files[0].uris.length && result.files[0].uris[0].uri)
+            title = result.files[0].uris[0].uri;
+
+        if (result.files.length > 1) {
+            var cnt = 0;
+            for (var i = 0; i < result.files.length; i++) {
+                if (result.files[i].selected == "true")
+                    cnt += 1;
+            }
+            if (cnt > 1)
+                title += " (" + cnt + " files..)"
+        }
+        return title;
     }
 
     $.jsonRPC.setup({endPoint: jsonrpc_interface, namespace: 'aria2'});
@@ -37,7 +66,7 @@ var Aria2 = function (settings) {
             });
             $.jsonRPC.batchRequest(commands, {success: success, error: error});
         },
-        addUri: function (uri, options) {//(uris[,options [,position]])
+        addUri: function (uri, options) {//todo need trigger
             if (!uri) return false;
             if (!$.isArray(uri)) uri = [uri];
             if (!options) options = {};
@@ -56,10 +85,15 @@ var Aria2 = function (settings) {
                 }
             );
         },
-        getGlobalStat: function () {
+        getGlobalStat: function () {// todo need trigger
             ARIA2.request("getGlobalStat", [],
                 function (result) {
-                    console.log(result);
+                    if (!result.result)
+                        console.warn(result);
+                    else {
+                        $("#totalUploadSpeed").text('{{' + result.downloadSpeed + '|bytes}}');
+                        $("#totalDownloadSpeed").text('{{' + result.uploadSpeed + '|bytes}}');
+                    }
                 }
             );
         },
@@ -84,22 +118,73 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        tellActive: function () {
-            ARIA2.request("tellActive", [["gid"]],
+        status_fix: function (results) {
+            for (var i = 0; i < results.length; i++) {
+                var result = results[i];
+
+                result.title = get_title(result);
+                if (result.totalLength == 0 || parseInt(result.totalLength) == 0)
+                    result.progress = 0;
+                else {
+                    result.progress = (result.completedLength * 1.0 / result.totalLength * 100).toFixed(2);
+                    result.totalLength = parseInt(result.totalLength);
+                }
+                result.eta = (result.totalLength - result.completedLength) / result.downloadSpeed;
+                result.downloadSpeed = parseInt(result.downloadSpeed);
+                result.uploadSpeed = parseInt(result.uploadSpeed);
+                result.uploadLength = parseInt(result.uploadLength);
+                result.completedLength = parseInt(result.completedLength);
+                result.numSeeders = parseInt(result.numSeeders);
+                result.connections = parseInt(result.connections);
+                result.numPieces = parseInt(result.numPieces);
+                result.pieceLength = parseInt(result.pieceLength);
+                for (var j = 0; j < result.files.length; j++) {
+                    var file = result.files[j];
+                    file.completedLength = parseInt(result.files[j].completedLength);
+                    file.length = parseInt(result.files[j].length);
+                    file.index = parseInt(result.files[j].index);
+                    file.title = file.path.replace(new RegExp("^" + result.dir.replace(/\\/g, "[\\/]") + "/?"), "");
+                    file.selected = file.selected == "true";
+                }
+
+            }
+            return results;
+        },
+        tellActive: function (auto) {
+            if (!auto) {
+                active_tasks_snapshot.length = 0;
+            }
+            ARIA2.request("tellActive", [],
+                function (result) {
+                    if (!result.result)
+                        console.warn(result);
+                    else {
+                        $.each(result.result, function (i, e) {
+                            active_tasks_snapshot.push(e);
+                        });
+                        if (auto) {
+                            ARIA2.tellWaiting(auto);
+                        } else {
+                            ARIA2.processList();
+                        }
+                    }
+                }
+            )
+        },
+
+        addTorrent: function (torrent, options) {
+            if (!torrent) return false;
+            if (!options) options = {};
+            ARIA2.request("addTorrent", [torrent, [], options],
                 function (result) {
                     console.log(result);
                 }
             )
         },
-        addTorrent: function (torrent) {//(torrent[, uris[[, options[,position]]])
-            ARIA2.request("addTorrent", [torrent],
-                function (result) {
-                    console.log(result);
-                }
-            )
-        },
-        addMetalink: function () {//(metalink[, option[, position]])
-            ARIA2.request("addMetalink", [],
+        addMetalink: function (metalink, options) {
+            if (!metalink) return false;
+            if (!options) options = {};
+            ARIA2.request("addMetalink", [metalink, [], options],
                 function (result) {
                     console.log(result);
                 }
@@ -154,13 +239,6 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        unpause: function () {//(gid)
-            ARIA2.request("unpause", [],
-                function (result) {
-                    console.log(result);
-                }
-            )
-        },
         unpauseAll: function () {//(none)
             ARIA2.request("unpauseAll", [],
                 function (result) {
@@ -168,15 +246,18 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        tellStatus: function () {//(gid [, keys])
-            ARIA2.request("tellStatus", [],
+        tellStatus: function (gid) {//(gid [, keys])
+            ARIA2.request("tellStatus", [gid],
                 function (result) {
                     console.log(result);
                 }
             )
         },
-        getUris: function () {//(gid)
-            ARIA2.request("getUris", [],
+        getUris: function (uri, options) {//(gid)
+            if (!uri) return false;
+            if (!$.isArray(uri)) uri = [uri];
+            if (!options) options = {};
+            ARIA2.request("getUris", [uri, options],
                 function (result) {
                     console.log(result);
                 }
@@ -203,17 +284,43 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        tellWaiting: function () {//(offset, num[, keys])
-            ARIA2.request("tellWaiting", [],
+        tellWaiting: function (auto) {
+            if (!auto) {
+                active_tasks_snapshot.length = 0;
+            }
+            var params = [0, 1000];
+            ARIA2.request("tellWaiting", params,
                 function (result) {
-                    console.log(result);
+                    if (!result.result)
+                        console.warn(result);
+                    else {
+                        $.each(result.result, function (i, e) {
+                            active_tasks_snapshot.push(e);
+                        });
+                    }
+                    if (auto) {
+                        ARIA2.tellStopped(auto);
+                    } else {
+                        ARIA2.processList();
+                    }
                 }
             )
         },
-        tellStopped: function () {//(offset, num[,keys])
-            ARIA2.request("tellStopped", [],
+        tellStopped: function (auto) {//(offset, num[,keys])
+            if (!auto) {
+                active_tasks_snapshot.length = 0;
+            }
+            var params = [0, 1000];
+            ARIA2.request("tellStopped", params,
                 function (result) {
-                    console.log(result);
+                    if (!result.result)
+                        console.warn(result);
+                    else {
+                        $.each(result.result, function (i, e) {
+                            active_tasks_snapshot.push(e);
+                        });
+                        ARIA2.processList();
+                    }
                 }
             )
         },
@@ -281,12 +388,12 @@ var Aria2 = function (settings) {
             )
         },
         /*multical: function () {//sustem.multical(methods)
-            ARIA2.request("multical", [],
-                function (result) {
-                    console.log(result);
-                }
-            )
-        },*/
+         ARIA2.request("multical", [],
+         function (result) {
+         console.log(result);
+         }
+         )
+         },*/
         onDownloadStart: function () {//(event)
             ARIA2.request("onDownloadStart", [],
                 function (result) {
@@ -329,5 +436,14 @@ var Aria2 = function (settings) {
                 }
             )
         },
+        refresh: function () {
+            active_tasks_snapshot.length = 0;
+            ARIA2.tellActive(true);
+        },
+        processList: function () {
+            active_tasks_snapshot = ARIA2.status_fix(active_tasks_snapshot);
+            List.length = 0;
+            $.extend(List, active_tasks_snapshot);
+        }
     }
 };

@@ -1,8 +1,7 @@
 /**
  * Created by Joey on 2015/12/1.
  */
-$("#totalUploadSpeed").text("N/A");
-$("#totalDownloadSpeed").text("N/A");
+
 //$(".switch").bootstrapSwitch();
 (function () {
     'use strict';
@@ -19,12 +18,19 @@ $("#totalDownloadSpeed").text("N/A");
                 return '0 B';
             }
         };
+    }).filter('title', function () {
+        return function (title, precision) {
+            if (title.length > parseInt(precision))
+                return title.substring(0, parseInt(precision)) + "..";
+            else
+                return title;
+        }
     }).factory('CurrentTask', function () {
         var current = {};
         if (List.length)
             $.extend(current, List[0]);
         return current;
-    }).controller('taskListController', function (CurrentTask) {
+    }).controller('taskListController', function (CurrentTask, $scope) {
         this.list = List;
 
         this.setCurrentTask = function (Ntask) {
@@ -34,6 +40,13 @@ $("#totalDownloadSpeed").text("N/A");
             });
             Ntask.active = true;
         };
+        $scope.$watch(List, function () {
+            setTimeout(function () {
+                if (List.length)
+                    $.extend(CurrentTask, List[0]);
+                $scope.$apply(); //this triggers a $digest
+            }, 100);
+        });
 
     }).controller('taskViewController', function (CurrentTask) {
         this.tab = 1;
@@ -55,54 +68,50 @@ var globalSettings = {
     host: "localhost",
     port: 6800
 };
-var List = [
-    {
-        name: "file1",
-        download: 1000206345,
-        total: 7068176341,
-        peers: [],
-        isBT: false,
-        state: "active",
-        path: "Downloads",
-        files: [
-            {
-                name: "file1.txt",
-                size: 7068176341,
-                download: 1000206345
-            }
-        ]
-    },
-    {
-        name: "file2",
-        download: 1084671,
-        total: 2097196,
-        peers: [
-            {
-                ip: "123.3.12.1",
-                client: "Transmitter",
-                progress: 80,
-                upSpeed: 89797,
-                downSpeed: 8978
-            }
-        ],
-        isBT: true,
-        state: "active",
-        path: "Downloads",
-        files: [
-            {
-                name: "file2.txt",
-                size: 109871,
-                download: 21987
-            },
-            {
-                name: "file2.zip",
-                size: 1019898,
-                download: 898719
-            }
-        ]
-    }
-];
-
+var List = [];
+/* List = [
+ {
+ title: "file1",
+ completedLength: 1000206345,
+ totalLength: 7068176341,
+ active: true,
+ bittorrent: {
+ announceList:[]
+ },
+ connections:0,
+ dir: "Downloads",
+ downloadSpeed:0,
+ eta:NaN,
+ files: [
+ {
+ index:1,
+ length: 7068176341,
+ completedLength: 1000206345,
+ selected:true,
+ path:"",
+ uris:[]
+ }
+ ],
+ gid:0,
+ infoHash:"",
+ numPieces:0,
+ numSeeders:0,
+ pieceLength:123,
+ progress:0,
+ status:"active",
+ uploadLength:0,
+ uploadSpeed:0
+ }
+ ];
+ */
 var ARIA2 = Aria2(globalSettings);
+
+var init = function () {
+
+};
 ARIA2.getVersion();
-ARIA2.tellActive();
+ARIA2.refresh();
+var DB = DBFactory();
+DB.init(function () {
+    console.log("DB initialized");
+});

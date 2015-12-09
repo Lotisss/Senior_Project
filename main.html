@@ -116,28 +116,32 @@
                     <div class="row"><h4>Basic Information</h4></div>
                     <div class="row">
                         <div class="col-xs-11 col-sm-11">
-                            <div class="input-group">
-                                <label class="input-group-addon" for="addTaskURL">URL</label>
-                                <input type="text" class="form-control" id="addTaskURL">
+                            <form name="addTaskForm" role="form">
+                                <div class="input-group form-group has-feedback">
+                                    <label class="input-group-addon" for="addTaskURL">URL</label>
+                                    <input type="url" name="url" class="form-control"
+                                           id="addTaskURL" required>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary">
+                                            <input type="file" id="fileInputTorrent">Upload Torrent
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-addon" for="addTaskFileName">File Name</label>
+                                    <input type="text" class="form-control" id="addTaskFileName">
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-primary">
-                                    <input type="file" id="fileInputTorrent">Upload Torrent
-                                </button>
-                            </span>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-group-addon" for="addTaskFileName">File Name</label>
-                                <input type="text" class="form-control" id="addTaskFileName">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-primary" id="addTaskPause">
+                                <button type="button" class="btn btn-primary" id="addTaskPause" ng-click="">
                                     <i class="glyphicon glyphicon-pause"></i>
                                 </button>
                             </span>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-group-addon" for="addTaskDirectory">Directory</label>
-                                <input type="text" class="form-control" placeholder="Directory" id="addTaskDirectory">
-                            </div>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-addon" for="addTaskDirectory">Directory</label>
+                                    <input type="text" class="form-control" placeholder="Directory"
+                                           id="addTaskDirectory">
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <div class="row"><h4>Specific Information</h4></div>
@@ -176,7 +180,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" id="addTaskCancel">Cancel</button>
-                    <button type="button" class="btn btn-success" id="addTaskAdd">Add</button>
+                    <button type="button" class="btn btn-success" id="addTaskAdd" ng-disabled="addTaskForm.$invalid">
+                        Add
+                    </button>
                 </div>
             </div>
         </div>
@@ -188,12 +194,13 @@
             <div class="list-group">
                 <a class="list-group-item" ng-repeat="task in taskList.list" href
                    ng-click="taskList.setCurrentTask(task)" ng-class="{ active : task.active }">
-                    <h4 class="list-group-item-heading">{{task.name}}</h4>
+                    <h5 class="list-group-item-heading">{{task.title|title:16}}</h5>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active" role="progressbar"
-                             style="width:{{(task.download/task.total)*100}}%">
-                            {{(task.download/task.total)*100 | number : 2}}%
+                             ng-class="{'progress-bar-success':task.status == complete}"
+                             style="width:{{task.progress}}%">
+                            {{task.progress}}%
                         </div>
                     </div>
                 </a>
@@ -206,24 +213,25 @@
             <div class="row">
                 <div class="col-lg-10 col-xs-8 col-sm-9 col-md-10">
                     <div class="panel" ng-show="taskViewer.isTab(1)">
-                        <h4>{{taskViewer.task.name}}</h4>
+                        <h4>{{taskViewer.task.title}}</h4>
                         <ul>
-                            <li>Size: {{taskViewer.task.download|bytes}}/{{taskViewer.task.total|bytes}}</li>
-                            <li>Status: {{taskViewer.task.state}}</li>
-                            <li>Path: {{taskViewer.task.path}}</li>
+                            <li>Size: {{taskViewer.task.completedLength|bytes}}/{{taskViewer.task.totalLength|bytes}}
+                            </li>
+                            <li>Status: {{taskViewer.task.status}}</li>
+                            <li>Path: {{taskViewer.task.dir}}</li>
                         </ul>
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(2)">
-                        <h4>{{taskViewer.task.name}}</h4>
+                        <h4>{{taskViewer.task.title}}</h4>
 
                         <div class="list-group">
                             <a class="list-group-item" ng-repeat="file in taskViewer.task.files" href>
-                                {{file.name}} {{file.download|bytes}} / {{file.size|bytes}}
+                                {{file.title}} {{file.completedLength|bytes}} / {{file.length|bytes}}
                             </a>
                         </div>
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(3)">
-                        <h4>{{taskViewer.task.name}}</h4>
+                        <h4>{{taskViewer.task.title}}</h4>
 
                         <div class="input-group">
                             <label class="input-group-addon" for="optionsDownloadLimit">Download Speed
@@ -249,6 +257,7 @@
 
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(4)">
+                        <h4>{{taskViewer.task.title}}</h4>
                         <div class="list-group">
                             <a class="list-group-item" ng-repeat="peer in taskViewer.task.peers" href>
                                 {{peer.ip + " " +peer.client + " (" + peer.progress + "%)"}}
@@ -270,7 +279,7 @@
                             <a href ng-click="taskViewer.setTab(3)">Options</a>
                         </li>
                         <li role="presentation" ng-class="{ active: taskViewer.isTab(4)}"
-                            ng-show="taskViewer.task.isBT">
+                            ng-show="taskViewer.task.bittorrent">
                             <a href ng-click="taskViewer.setTab(4)">Peers</a>
                         </li>
                     </ul>
@@ -298,7 +307,7 @@
             </div>
 
             <div class="row controllerView">
-                <button type="button" id="BTNFresh" class="btn btn-primary" ng-click="ARIA2.getVersion()">
+                <button type="button" id="BTNFresh" class="btn btn-primary" ng-click="ARIA2.refresh()">
                     <i class="glyphicon glyphicon-refresh"></i>
                 </button>
                 <button type="button" id="BTNSettings" data-toggle="modal" data-target="#modalSettings"
@@ -324,6 +333,7 @@
 <script src="js/lib/angular.min.js"></script>
 <script src="js/lib/jquery.jsonrpc.js"></script>
 <script src="js/lib/aria2.js"></script>
+<script src="js/lib/DB.js"></script>
 <script src="js/main.js"></script>
 </body>
 
