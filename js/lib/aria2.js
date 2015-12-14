@@ -5,8 +5,40 @@
  */
 var Aria2 = function (settings) {
     var jsonrpc_interface = settings.path || "http://localhost:" + settings.port + "/jsonrpc";
-    var active_tasks_snapshot = [], finished_tasks_list = undefined, tasks_cnt_snapshot = "";
-
+    var active_tasks_snapshot = [];
+    var error_code_map = {
+        0: "",
+        1: "unknown error occurred.",
+        2: "time out occurred.",
+        3: "resource was not found.",
+        4: "resource was not found. See --max-file-not-found option.",
+        5: "resource was not found. See --lowest-speed-limit option.",
+        6: "network problem occurred.",
+        7: "unfinished download.",
+        8: "remote server did not support resume when resume was required to complete download.",
+        9: "there was not enough disk space available.",
+        10: "piece length was different from one in .aria2 control file. See --allow-piece-length-change option.",
+        11: "aria2 was downloading same file at that moment.",
+        12: "aria2 was downloading same info hash torrent at that moment.",
+        13: "file already existed. See --allow-overwrite option.",
+        14: "renaming file failed. See --auto-file-renaming option.",
+        15: "aria2 could not open existing file.",
+        16: "aria2 could not create new file or truncate existing file.",
+        17: "I/O error occurred.",
+        18: "aria2 could not create directory.",
+        19: "name resolution failed.",
+        20: "could not parse Metalink document.",
+        21: "FTP command failed.",
+        22: "HTTP response header was bad or unexpected.",
+        23: "too many redirections occurred.",
+        24: "HTTP authorization failed.",
+        25: "aria2 could not parse bencoded file(usually .torrent file).",
+        26: ".torrent file was corrupted or missing information that aria2 needed.",
+        27: "Magnet URI was bad.",
+        28: "bad/unrecognized option was given or unexpected option argument was given.",
+        29: "the remote server was unable to handle the request due to a temporary overloading or maintenance.",
+        30: "aria2 could not parse JSON-RPC request.",
+    };
 
     function default_error(result) {
         console.debug(result);
@@ -18,14 +50,14 @@ var Aria2 = function (settings) {
         if (result.bittorrent && result.bittorrent.info && result.bittorrent.info.name)
             title = result.bittorrent.info.name;
         else if (result.files[0].path.replace(
-                new RegExp("^" + dir.replace(/\\/g, "/").replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + "/?"), "").split("/").length) {
+                new RegExp("^" + dir.replace(/\\/g, "/").replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + "/?"), "").split("/")[0].length) {
             title = result.files[0].path.replace(new RegExp("^" + dir.replace(/\\/g, "/").replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + "/?"), "").split("/");
             if (result.bittorrent)
                 title = title[0];
             else
                 title = title[title.length - 1];
         } else if (result.files.length && result.files[0].uris.length && result.files[0].uris[0].uri)
-            title = result.files[0].uris[0].uri;
+            title = result.files[0].uris[0].uri.replace(/^\w.+\//, "").replace(/(\?|\&|\#)\w.+/, "");
 
         if (result.files.length > 1) {
             var cnt = 0;
@@ -36,6 +68,7 @@ var Aria2 = function (settings) {
             if (cnt > 1)
                 title += " (" + cnt + " files..)"
         }
+
         return title;
     }
 
@@ -66,49 +99,57 @@ var Aria2 = function (settings) {
             });
             $.jsonRPC.batchRequest(commands, {success: success, error: error});
         },
-        addUri: function (uri, options, callback) {//todo need trigger
+        addUri: function (uri, options, callback) {
             if (!uri) return false;
             if (!$.isArray(uri)) uri = [uri];
             if (!options) options = {};
             ARIA2.request("addUri", [uri, options],
                 function (result) {
                     if (result.result)
-                        callback();
+                        callback(result.result);
                 },
                 function (result) {
                     console.debug(result);
                 });
         },
-        getVersion: function () {
+        getVersion: function (callback) {
             ARIA2.request("getVersion", [],
                 function (result) {
-                    console.log(result);
+                    if (result.result)
+                        callback(result.result);
                 }
             );
         },
-        getGlobalStat: function () {// todo need trigger
+        getGlobalStat: function (callback) {
             ARIA2.request("getGlobalStat", [],
                 function (result) {
                     if (!result.result)
                         console.warn(result);
                     else {
-                        $("#totalUploadSpeed").text('{{' + result.downloadSpeed + '|bytes}}');
-                        $("#totalDownloadSpeed").text('{{' + result.uploadSpeed + '|bytes}}');
+                        return callback(result.result);
                     }
                 }
             );
         },
-        getGlobalOption: function () {
+        getGlobalOption: function (callback) {
             ARIA2.request("getGlobalOption", [],
                 function (result) {
-                    console.log(result);
+                    if (!result.result)
+                        console.warn(result);
+                    else {
+                        return callback(result.result);
+                    }
                 }
             )
         },
-        changeGlobalOption: function (options) {
+        changeGlobalOption: function (options, callback) {
             ARIA2.request("changeGlobalOption", [options],
                 function (result) {
-                    console.log(result);
+                    if (!result.result)
+                        console.warn(result);
+                    else {
+                        return callback(result.result);
+                    }
                 }
             )
         },
@@ -131,6 +172,7 @@ var Aria2 = function (settings) {
                     result.totalLength = parseInt(result.totalLength);
                 }
                 result.eta = (result.totalLength - result.completedLength) / result.downloadSpeed;
+
                 result.downloadSpeed = parseInt(result.downloadSpeed);
                 result.uploadSpeed = parseInt(result.uploadSpeed);
                 result.uploadLength = parseInt(result.uploadLength);
@@ -147,11 +189,12 @@ var Aria2 = function (settings) {
                     file.title = file.path.replace(new RegExp("^" + result.dir.replace(/\\/g, "[\\/]") + "/?"), "");
                     file.selected = file.selected == "true";
                 }
+                result.errorEx = error_code_map[result.errorCode];
 
             }
             return results;
         },
-        tellActive: function (auto) {
+        tellActive: function (auto, callback) {
             if (!auto) {
                 active_tasks_snapshot.length = 0;
             }
@@ -164,32 +207,39 @@ var Aria2 = function (settings) {
                             active_tasks_snapshot.push(e);
                         });
                         if (auto) {
-                            ARIA2.tellWaiting(auto);
+                            ARIA2.tellWaiting(auto, callback);
                         } else {
-                            ARIA2.processList();
+                            ARIA2.processList(callback);
                         }
                     }
                 }
             )
         },
-
-        addTorrent: function (torrent, options) {
+        addTorrent: function (torrent, options, callback) {
             if (!torrent) return false;
             if (!options) options = {};
             ARIA2.request("addTorrent", [torrent, [], options],
                 function (result) {
-                    console.log(result);
+                    if (result.result)
+                        callback();
+                },
+                function (result) {
+                    console.debug(result);
                 }
-            )
+            );
         },
-        addMetalink: function (metalink, options) {
+        addMetalink: function (metalink, options, callback) {
             if (!metalink) return false;
             if (!options) options = {};
             ARIA2.request("addMetalink", [metalink, [], options],
                 function (result) {
-                    console.log(result);
+                    if (result.result)
+                        callback();
+                },
+                function (result) {
+                    console.debug(result);
                 }
-            )
+            );
         },
         remove: function () {//(gid)
             ARIA2.request("remove", [],
@@ -285,7 +335,7 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        tellWaiting: function (auto) {
+        tellWaiting: function (auto, callback) {
             if (!auto) {
                 active_tasks_snapshot.length = 0;
             }
@@ -300,14 +350,14 @@ var Aria2 = function (settings) {
                         });
                     }
                     if (auto) {
-                        ARIA2.tellStopped(auto);
+                        ARIA2.tellStopped(auto, callback);
                     } else {
-                        ARIA2.processList();
+                        ARIA2.processList(callback);
                     }
                 }
             )
         },
-        tellStopped: function (auto) {//(offset, num[,keys])
+        tellStopped: function (auto, callback) {//(offset, num[,keys])
             if (!auto) {
                 active_tasks_snapshot.length = 0;
             }
@@ -320,7 +370,7 @@ var Aria2 = function (settings) {
                         $.each(result.result, function (i, e) {
                             active_tasks_snapshot.push(e);
                         });
-                        ARIA2.processList();
+                        ARIA2.processList(callback);
                     }
                 }
             )
@@ -437,14 +487,13 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        refresh: function () {
+        refresh: function (callback) {
             active_tasks_snapshot.length = 0;
-            ARIA2.tellActive(true);
+            ARIA2.tellActive(true, callback);
         },
-        processList: function () {
+        processList: function (callback) {
             active_tasks_snapshot = ARIA2.status_fix(active_tasks_snapshot);
-            List.length = 0;
-            $.extend(List, active_tasks_snapshot);
+            return callback(active_tasks_snapshot);
         }
     }
 };
