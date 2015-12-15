@@ -332,7 +332,7 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        unpause: function () {//(gid)
+        unpause: function (gids, callback, errCallback) {//(gid)
             if (!errCallback)
                 errCallback = default_error;
             if (!$.isArray(gids)) gids = [gids];
@@ -357,10 +357,11 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        tellStatus: function (gid) {//(gid [, keys])
+        tellStatus: function (gid, callback) {//(gid [, keys])
             ARIA2.request("tellStatus", [gid],
                 function (result) {
-                    console.log(result);
+                    if (result.result)
+                        callback(result.result);
                 }
             )
         },

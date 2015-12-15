@@ -102,7 +102,7 @@ var SizeConverter = function (bytes, precision) {
         this.startTask = function () {
             var gid = CurrentTask.gid;
             if (CurrentTask.status == 'paused')
-                ARIA2.pause(gid, function (re) {
+                ARIA2.unpause(gid, function (re) {
                     refresh();
                 });
             else if (CurrentTask.status.match(/(error|removed)/)) {
@@ -138,14 +138,6 @@ var SizeConverter = function (bytes, precision) {
                 }
                 if (!globalSettings.refreshPause || listChange)
                     ARIA2.refresh(function (list) {
-                        var stateC = [];
-                        $.each($scope, function (pi, pn) {
-                            $.each(list, function (ni, nn) {
-                                if (pn.gid == nn.gid)
-                                    if (pn.state != nn.state)
-                                        stateC.push(nn);
-                            })
-                        });
                         $.extend($scope.taskList, list);
                         $scope.$apply();
                     });
@@ -249,12 +241,19 @@ var init = function () {
     var URLPattern = "((http|ftp|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?";
     var magnetPattern = "/^magnet:\?xt=urn:[a-z0-9]{20,50}/i";
     var torrent_file, file_type;
-    var cleanADT = function (re) {
+    var cleanADT = function (gid) {
         $("#modalAddTask").modal("hide");
+        ADTURiG.removeClass("has-success").addClass("has-error");
+        ADTBtn.prop('disabled', true);
         ADTURi.val("");
         torrent_file = null;
         file_type = null;
-        NOTIFY.showProgress("A new task added", "GID:" + re, 50);
+
+        NOTIFY.showProgress("A new task added", "GID:" + gid, 0);
+        ARIA2.tellStatus(gid,function(task){
+            DB.addRecord(task,function(){})
+        });
+
     };
     ADTURi.bind('input propertychange', (function () {
             var value = $(this).val();

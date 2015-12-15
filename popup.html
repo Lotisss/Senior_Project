@@ -10,9 +10,6 @@
     <div id="container" ng-app="taskPanel">
         <div class="list-group" ng-controller="taskListController as taskListCtr">
             <a href="#" class="list-group-item default" id="DPageLink">Manage</a>
-            <a class="list-group-item" ng-repeat="task in taskListCtr.taskList" href>
-                <h5 class="list-group-item-heading">{{task.title|title:16}}</h5>
-            </a>
         </div>
     </div>
 </div>
