@@ -112,6 +112,27 @@ var Aria2 = function (settings) {
                     console.debug(result);
                 });
         },
+        madd_task: function (uris, options, callback, errCallback) {
+            if (!errCallback)
+                errCallback = default_error;
+            if (!$.isArray(uris)) uris = [uris];
+            var params = [];
+            for (var i = 0; i < uris.length; i++) {
+                params.push([[uris[i]], options]);
+            }
+            ARIA2.batchRequest("addUri", params,
+                function (result) {
+                    var error = [];
+                    $.each(result, function (i, n) {
+                        if (n.error)
+                            error.push(n);
+                    });
+                    if (error.length != 0)
+                        errCallback(error);
+                    else
+                        callback(result);
+                })
+        },
         getVersion: function (callback) {
             ARIA2.request("getVersion", [],
                 function (result) {
@@ -234,17 +255,34 @@ var Aria2 = function (settings) {
             ARIA2.request("addMetalink", [metalink, [], options],
                 function (result) {
                     if (result.result)
-                        callback();
+                        callback(result.result);
                 },
                 function (result) {
                     console.debug(result);
                 }
             );
         },
-        remove: function () {//(gid)
-            ARIA2.request("remove", [],
+        remove: function (gids, callback, errCallback) {//(gid)
+            if (!errCallback)
+                errCallback = default_error;
+            if (!$.isArray(gids)) gids = [gids];
+            ARIA2.batchRequest("remove", gids,
                 function (result) {
-                    console.log(result);
+                    var error = [];
+                    var removeRe = [];
+                    $.each(result, function (i, n) {
+                        if (n.error)
+                            if (n.error.code == '1' && n.error.message.match(/.+not found.+#/))
+                                removeRe.push(n.error.message.replace(/.+not found.+#/, ""));
+                            else
+                                error.push(n);
+                    });
+                    if (removeRe.length != 0)
+                        ARIA2.removeDownloadResult(removeRe, callback, errCallback);
+                    else
+                        callback(result);
+                    if (error.length != 0)
+                        errCallback(error);
                 }
             )
         },
@@ -255,10 +293,21 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        pause: function () {//(gid)
-            ARIA2.request("pause", [],
+        pause: function (gids, callback, errCallback) {//(gid)
+            if (!errCallback)
+                errCallback = default_error;
+            if (!$.isArray(gids)) gids = [gids];
+            ARIA2.batchRequest("pause", gids,
                 function (result) {
-                    console.log(result);
+                    var error = [];
+                    $.each(result, function (i, n) {
+                        if (n.error)
+                            error.push(n);
+                    });
+                    if (error.length != 0)
+                        errCallback(error);
+                    else
+                        callback(result);
                 }
             )
         },
@@ -284,9 +333,20 @@ var Aria2 = function (settings) {
             )
         },
         unpause: function () {//(gid)
-            ARIA2.request("unpause", [],
+            if (!errCallback)
+                errCallback = default_error;
+            if (!$.isArray(gids)) gids = [gids];
+            ARIA2.batchRequest("unpause", gids,
                 function (result) {
-                    console.log(result);
+                    var error = [];
+                    $.each(result, function (i, n) {
+                        if (n.error)
+                            error.push(n);
+                    });
+                    if (error.length != 0)
+                        errCallback(error);
+                    else
+                        callback(result);
                 }
             )
         },
@@ -389,10 +449,11 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        getOption: function () {//(gid)
-            ARIA2.request("getOption", [],
+        getOption: function (gid, callback) {//(gid)
+            ARIA2.request("getOption", [gid],
                 function (result) {
-                    console.log(result);
+                    if (result.result)
+                        callback(result.result)
                 }
             )
         },
@@ -403,10 +464,21 @@ var Aria2 = function (settings) {
                 }
             )
         },
-        removeDownloadResult: function () {//(gid)
-            ARIA2.request("removeDownloadResult", [],
+        removeDownloadResult: function (gids, callback, errCallback) {//(gid)
+            if (!errCallback)
+                errCallback = default_error;
+            if (!$.isArray(gids)) gids = [gids];
+            ARIA2.batchRequest("removeDownloadResult", gids,
                 function (result) {
-                    console.log(result);
+                    var error = [];
+                    $.each(result, function (i, n) {
+                        if (n.error)
+                            error.push(n);
+                    });
+                    if (error.length != 0)
+                        errCallback(error);
+                    else
+                        callback(result);
                 }
             )
         },

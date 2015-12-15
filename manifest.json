@@ -14,7 +14,7 @@
     "default_icon": "img/action_icon.png"
   },
   "background": {
-    "page": "main.html"
+    "page": "background.html"
   },
   "permissions": [
     "activeTab",

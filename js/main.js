@@ -6,7 +6,7 @@ var globalSettings = {
     host: "localhost",
     port: 6800,
     notification: true,
-    refresh: 1,
+    refresh: 0,
     refreshPause: false
 };
 var ARIA2 = Aria2(globalSettings);
@@ -75,7 +75,7 @@ var SizeConverter = function (bytes, precision) {
             return this.tab === tabN;
         };
     }).controller('Aria2Controller', function ($scope, CurrentTask) {
-        this.refresh = function () {
+        var refresh = function () {
             ARIA2.getGlobalStat(function (re) {
                 $("#totalDownloadSpeed").val(SizeConverter(re.downloadSpeed, 2) + "/s");
                 $("#totalUploadSpeed").val(SizeConverter(re.uploadSpeed, 2) + "/s");
@@ -87,6 +87,42 @@ var SizeConverter = function (bytes, precision) {
                 });
             });
         };
+        this.delTask = function () {
+            var gid = CurrentTask.gid;
+            ARIA2.remove(gid, function (re) {
+                refresh();
+            });
+        };
+        this.pauTask = function () {
+            var gid = CurrentTask.gid;
+            ARIA2.pause(gid, function (re) {
+                refresh();
+            });
+        };
+        this.startTask = function () {
+            var gid = CurrentTask.gid;
+            if (CurrentTask.status == 'paused')
+                ARIA2.pause(gid, function (re) {
+                    refresh();
+                });
+            else if (CurrentTask.status.match(/(error|removed)/)) {
+                var uris = [];
+                $.each(CurrentTask.files, function (n, e) {
+                    if (e.uris.length)
+                        uris.push(e.uris[0].uri);
+                });
+                if (uris.length > 0)
+                    ARIA2.getOption(gid, function (re) {
+                        if (re.result)
+                            ARIA2.madd_task(uris, re.result, function (result) {
+                                ARIA2.remove(gid, function (result) {
+                                    refresh();
+                                })
+                            })
+                    });
+            }
+        };
+        this.refresh = refresh;
     }).controller('globalSetting', function ($scope) {
         var interval_id;
         var preList = "";
@@ -102,6 +138,14 @@ var SizeConverter = function (bytes, precision) {
                 }
                 if (!globalSettings.refreshPause || listChange)
                     ARIA2.refresh(function (list) {
+                        var stateC = [];
+                        $.each($scope, function (pi, pn) {
+                            $.each(list, function (ni, nn) {
+                                if (pn.gid == nn.gid)
+                                    if (pn.state != nn.state)
+                                        stateC.push(nn);
+                            })
+                        });
                         $.extend($scope.taskList, list);
                         $scope.$apply();
                     });
@@ -144,11 +188,7 @@ var SizeConverter = function (bytes, precision) {
             option['user-agent'] = $scope.Aria2.UA;
             ARIA2.changeGlobalOption(option, function () {
                 $("#modalSettings").modal("hide");
-                var nfr = parseInt($("#settingsRefreshInput").val());
-                if (globalSettings.refresh != nfr) {
-                    globalSettings.refresh = nfr;
-                    intF();
-                }
+                intF();
             });
             var SPN = $("#settingsPort");
 
@@ -174,8 +214,10 @@ var settingsInit = function () {
     SPN.val(globalSettings.port);
     if (globalSettings.refresh > 0)
         SRI.val(globalSettings.refresh);
-    else
+    else {
         SRBtn.removeClass("btn-primary");
+        SRI.prop("disabled", true).val('');
+    }
     if (!globalSettings.notification)
         SBtn.removeClass("btn-primary");
     SBtn.click(function () {
@@ -193,82 +235,81 @@ var settingsInit = function () {
             SRI.prop("disabled", true).val('');
         } else {
             $(this).addClass("btn-primary");
+            globalSettings.refresh = 1;
             SRI.prop("disabled", false).val(1);
         }
     });
 };
 var init = function () {
-        settingsInit();
-        var ADTBtn = $("#addTaskAdd");
-        var ADTURi = $("#addTaskURL");
-        var ADTURiG = $("#addTaskURLGroup");
-        var ADTFIT = $("#fileInputTorrent");
-        var URLPattern = "((http|ftp|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?";
-        var magnetPattern = "/^magnet:\?xt=urn:[a-z0-9]{20,50}/i";
-        var torrent_file, file_type;
-        var cleanADT = function () {
-            $("#modalAddTask").modal("hide");
-            ADTURi.val("");
-            torrent_file = null;
-            file_type = null;
-            NOTIFY.showProgress("A new task added", "GID:" + re, 50);
-            console.debug(re);
-        };
-        ADTURi.bind('input propertychange', (function () {
-                var value = $(this).val();
-                if (value.match(URLPattern) || value.match(magnetPattern || torrent_file)) {
-                    ADTURiG.removeClass("has-error").addClass("has-success");
-                    ADTBtn.prop('disabled', false);
-                } else {
-                    ADTURiG.removeClass("has-success").addClass("has-error");
-                    ADTBtn.prop('disabled', true);
-                }
-            }
-        ));
-
-        ADTBtn.click(function () {
-            var uri = ADTURi.val();
-            if (uri.match(URLPattern))
-                ARIA2.addUri(uri, getOptions(), function (re) {
-                    cleanADT();
-                });
-            else if (uri.match(magnetPattern))
-                ARIA2.addMetalink(uri, getOptions(), function (re) {
-                    cleanADT();
-                });
-            else if (torrent_file)
-                if (file_type.indexOf("metalink") != -1)
-                    ARIA2.addMetalink(torrent_file, getOptions(), function (re) {
-                        cleanADT();
-                    });
-                else
-                    ARIA2.addTorrent(torrent_file, getOptions(), function (re) {
-                        cleanADT();
-                    });
-
-        });
-        if (window.FileReader) {
-            ADTFIT.get(0).onchange = function (e) {
-                var file = e.target.files[0];
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    ADTURiG.removeClass("has-error").addClass("has-success");
-                    ADTBtn.prop('disabled', false);
-                    ADTURi.attr("placeholder", file.name);
-                    torrent_file = e.target.result.replace(/.*?base64,/, "");
-                    file_type = file.type;
-                };
-                reader.readAsDataURL(file);
+    settingsInit();
+    var ADTBtn = $("#addTaskAdd");
+    var ADTURi = $("#addTaskURL");
+    var ADTURiG = $("#addTaskURLGroup");
+    var ADTFIT = $("#fileInputTorrent");
+    var URLPattern = "((http|ftp|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?";
+    var magnetPattern = "/^magnet:\?xt=urn:[a-z0-9]{20,50}/i";
+    var torrent_file, file_type;
+    var cleanADT = function (re) {
+        $("#modalAddTask").modal("hide");
+        ADTURi.val("");
+        torrent_file = null;
+        file_type = null;
+        NOTIFY.showProgress("A new task added", "GID:" + re, 50);
+    };
+    ADTURi.bind('input propertychange', (function () {
+            var value = $(this).val();
+            if (value.match(URLPattern) || value.match(magnetPattern || torrent_file)) {
+                ADTURiG.removeClass("has-error").addClass("has-success");
+                ADTBtn.prop('disabled', false);
+            } else {
+                ADTURiG.removeClass("has-success").addClass("has-error");
+                ADTBtn.prop('disabled', true);
             }
         }
+    ));
 
-        ARIA2.getVersion(function (re) {
-            $("#setAriaVer").text(" ver." + re.version)
-        });
-        DB.init(function () {
-            console.log("DB initialized");
-        });
+    ADTBtn.click(function () {
+        var uri = ADTURi.val();
+        if (uri.match(URLPattern))
+            ARIA2.addUri(uri, getOptions(), function (re) {
+                cleanADT(re);
+            });
+        else if (uri.match(magnetPattern))
+            ARIA2.addMetalink(uri, getOptions(), function (re) {
+                cleanADT(re);
+            });
+        else if (torrent_file)
+            if (file_type.indexOf("metalink") != -1)
+                ARIA2.addMetalink(torrent_file, getOptions(), function (re) {
+                    cleanADT(re);
+                });
+            else
+                ARIA2.addTorrent(torrent_file, getOptions(), function (re) {
+                    cleanADT(re);
+                });
+
+    });
+    if (window.FileReader) {
+        ADTFIT.get(0).onchange = function (e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                ADTURiG.removeClass("has-error").addClass("has-success");
+                ADTBtn.prop('disabled', false);
+                ADTURi.attr("placeholder", file.name);
+                torrent_file = e.target.result.replace(/.*?base64,/, "");
+                file_type = file.type;
+            };
+            reader.readAsDataURL(file);
+        }
     }
-    ;
-init();
+
+    ARIA2.getVersion(function (re) {
+        $("#setAriaVer").text(" ver." + re.version)
+    });
+    DB.init(function () {
+        console.log("DB initialized");
+    });
+};
 NOTIFY.success("Init success");
+init();

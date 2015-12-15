@@ -256,20 +256,23 @@
                     </div>
                     <div class="panel" ng-show="taskViewer.isTab(3)">
                         <div class="input-group">
-                            <label class="input-group-addon" for="optionsDownloadLimit">Download Speed
-                                Limit</label>
+                            <label class="input-group-addon" for="optionsDownloadLimit">
+                                Download Speed Limit</label>
                             <input type="text" class="form-control" id="optionsDownloadLimit">
                         </div>
                         <div class="input-group">
-                            <label class="input-group-addon" for="optionsLoadLimit">Upload Speed Limit</label>
+                            <label class="input-group-addon" for="optionsLoadLimit">
+                                Upload Speed Limit</label>
                             <input type="text" class="form-control" id="optionsLoadLimit">
                         </div>
                         <div class="input-group">
-                            <label class="input-group-addon" for="optionsMaxConnections">Max Connections</label>
+                            <label class="input-group-addon" for="optionsMaxConnections">
+                                Max Connections</label>
                             <input type="text" class="form-control" id="optionsMaxConnections">
                         </div>
                         <div class="input-group">
-                            <label class="input-group-addon" for="optionsSpilt">Spilt</label>
+                            <label class="input-group-addon" for="optionsSpilt">
+                                Spilt</label>
                             <input type="text" class="form-control" id="optionsSpilt">
                         </div>
                         <div class="input-group">
@@ -328,7 +331,7 @@
                         <button type="button" id="taskBTNPause" class="btn btn-primary">
                             <i class="glyphicon glyphicon-stop"></i>
                         </button>
-                        <button type="button" id="taskBTNClear" class="btn btn-primary">
+                        <button type="button" id="taskBTNClear" class="btn btn-primary" ng-click="ARIA2.delTask()">
                             <i class="glyphicon glyphicon-trash"></i>
                         </button>
                     </div>
