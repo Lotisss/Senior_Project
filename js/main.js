@@ -7,11 +7,21 @@ var globalSettings = {
     port: 6800,
     notification: true,
     refresh: 0,
-    refreshPause: false
+    refreshPause: false,
+    inShortMsg: false
 };
+if (typeof(Storage) !== "undefined") {
+    if (localStorage.globalSettings) {
+        globalSettings = JSON.parse(localStorage.globalSettings);
+    } else {
+        localStorage.setItem("globalSettings", JSON.stringify(globalSettings));
+    }
+} else {
+
+}
 var ARIA2 = Aria2(globalSettings);
 var DB = DBFactory();
-var NOTIFY = Notify();
+//var NOTIFY = Notify();
 /**
  * @return {string}
  */
@@ -210,14 +220,20 @@ var settingsInit = function () {
         SRBtn.removeClass("btn-primary");
         SRI.prop("disabled", true).val('');
     }
+    var port = chrome.extension.connect({name: "Sample Communication"});
+    port.onMessage.addListener(function (msg) {
+        console.log("message recieved" + msg);
+    });
     if (!globalSettings.notification)
         SBtn.removeClass("btn-primary");
     SBtn.click(function () {
         globalSettings.notification = !globalSettings.notification;
-        if (globalSettings.notification)
+        if (globalSettings.notification) {
             $(this).addClass("btn-primary");
+        }
         else
             $(this).removeClass("btn-primary");
+        port.postMessage("{notification:" + globalSettings.notification + "}");
     });
 
     SRBtn.click(function () {
@@ -243,15 +259,17 @@ var init = function () {
     var torrent_file, file_type;
     var cleanADT = function (gid) {
         $("#modalAddTask").modal("hide");
-        ADTURiG.removeClass("has-success").addClass("has-error");
+        ADTURiG.removeClass("has-success");
         ADTBtn.prop('disabled', true);
         ADTURi.val("");
+        ADTURi.attr("placeholder", "");
         torrent_file = null;
         file_type = null;
-
-        NOTIFY.showProgress("A new task added", "GID:" + gid, 0);
-        ARIA2.tellStatus(gid,function(task){
-            DB.addRecord(task,function(){})
+        ADTFIT.empty();
+        //NOTIFY.showProgress("A new task added", "GID:" + gid, 0);
+        ARIA2.tellStatus(gid, function (task) {
+            DB.addRecord(task, function () {
+            })
         });
 
     };
@@ -310,5 +328,5 @@ var init = function () {
         console.log("DB initialized");
     });
 };
-NOTIFY.success("Init success");
+//NOTIFY.success("Init success");
 init();

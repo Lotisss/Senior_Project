@@ -3,10 +3,10 @@
  */
 var Notify = function () {
     return {
-        success: function (msg) {
+        basic: function (title, msg) {
             var msgOpt = {
                 type: "basic",
-                title: "Aria2 Download",
+                title: title,
                 iconUrl: "/img/icon96.png",
                 message: msg
             };
@@ -29,7 +29,18 @@ var Notify = function () {
             chrome.notifications.create("Aria2", msgOpt, function () {
 
             });
-        }
+        },
+        list: function (title, msg, list) {
+            var msgOpt = {
+                type: "list",
+                title: title,
+                iconUrl: "/img/icon96.png",
+                message: msg,
+                items: list
+            };
+            chrome.notifications.create("Aria2", msgOpt, function () {
+            });
 
-    }
+        }
+    };
 };
