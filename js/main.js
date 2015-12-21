@@ -235,7 +235,7 @@ var init = function () {
     var ADTURiG = $("#addTaskURLGroup");
     var ADTFIT = $("#fileInputTorrent");
     var URLPattern = "((http|ftp|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?";
-    var magnetPattern = "/^magnet:\?xt=urn:.{20,50}/";
+    var magnetPattern = /^magnet:\?xt=urn:.{20,70}/;
     var torrent_file, file_type;
     var cleanADT = function (gid) {
         $("#modalAddTask").modal("hide");
@@ -272,7 +272,7 @@ var init = function () {
                 cleanADT(re);
             });
         else if (uri.match(magnetPattern))
-            ARIA2.addMetalink(uri, getOptions(), function (re) {
+            ARIA2.addUri(uri, getOptions(), function (re) {
                 cleanADT(re);
             });
         else if (torrent_file)
