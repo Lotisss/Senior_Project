@@ -1,25 +1,6 @@
 /**
  * Created by Joey on 2015/12/1.
  */
-var globalSettings = {
-    rpc_secret: "token:secrettoken",
-    host: "localhost",
-    port: 6800,
-    notification: true,
-    refresh: 0,
-    refreshPause: false,
-    inShortMsg: false
-};
-if (typeof(Storage) !== "undefined") {
-    if (localStorage.globalSettings) {
-        globalSettings = JSON.parse(localStorage.globalSettings);
-    } else {
-        localStorage.setItem("globalSettings", JSON.stringify(globalSettings));
-    }
-} else {
-
-}
-var ARIA2 = Aria2(globalSettings);
 var DB = DBFactory();
 //var NOTIFY = Notify();
 /**
@@ -123,12 +104,11 @@ var SizeConverter = function (bytes, precision) {
                 });
                 if (uris.length > 0)
                     ARIA2.getOption(gid, function (re) {
-                        if (re.result)
-                            ARIA2.madd_task(uris, re.result, function (result) {
-                                ARIA2.remove(gid, function (result) {
-                                    refresh();
-                                })
+                        ARIA2.madd_task(uris, re, function (result) {
+                            ARIA2.remove(gid, function (result) {
+                                refresh();
                             })
+                        })
                     });
             }
         };
@@ -193,11 +173,11 @@ var SizeConverter = function (bytes, precision) {
                 intF();
             });
             var SPN = $("#settingsPort");
-
             if (parseInt(SPN.val()) != globalSettings.port) {
                 globalSettings.port = SPN.val();
                 ARIA2 = Aria2(globalSettings);
             }
+            localStorage.setItem("globalSettings", JSON.stringify(globalSettings));
         };
         this.fetchOptions();
     });
@@ -255,7 +235,7 @@ var init = function () {
     var ADTURiG = $("#addTaskURLGroup");
     var ADTFIT = $("#fileInputTorrent");
     var URLPattern = "((http|ftp|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?";
-    var magnetPattern = "/^magnet:\?xt=urn:[a-z0-9]{20,50}/i";
+    var magnetPattern = "/^magnet:\?xt=urn:.{20,50}/";
     var torrent_file, file_type;
     var cleanADT = function (gid) {
         $("#modalAddTask").modal("hide");

@@ -3,27 +3,6 @@
  */
 var preStat = "";
 var preList = [];
-var globalSettings = {
-    rpc_secret: "token:secrettoken",
-    host: "localhost",
-    port: 6800,
-    notification: true,
-    refresh: 0,
-    refreshPause: false,
-    inShortMsg: false
-};
-if (typeof(Storage) !== "undefined") {
-    if (localStorage.globalSettings) {
-        globalSettings = JSON.parse(localStorage.globalSettings);
-        preStat = localStorage.preStat;
-        preList = JSON.parse(localStorage.preList);
-    } else {
-        localStorage.setItem("globalSettings", JSON.stringify(globalSettings));
-    }
-} else {
-
-}
-var ARIA2 = Aria2(globalSettings);
 var NOTIFY = Notify();
 
 var interval_id;
@@ -35,7 +14,7 @@ var intF = function (start) {
     }
     interval_id = window.setInterval(function () {
         refresh();
-    }, 10000)
+    }, 5000)
 };
 
 var refresh = function () {
@@ -99,5 +78,8 @@ chrome.extension.onConnect.addListener(function (port) {
 });
 
 intF(globalSettings.notification);
+
+if (chrome.downloads.setShelfEnabled)
+    chrome.downloads.setShelfEnabled(false);
 
 

@@ -570,3 +570,26 @@ var Aria2 = function (settings) {
         }
     }
 };
+//Settings Supporting
+var globalSettings = {
+    rpc_secret: "token:secrettoken",
+    host: "localhost",
+    port: 6800,
+    notification: true,
+    refresh: 0,
+    refreshPause: false,
+    inShortMsg: false
+};
+if (typeof(Storage) !== "undefined") {
+    if (localStorage.globalSettings) {
+        globalSettings = JSON.parse(localStorage.globalSettings);
+        preStat = localStorage.preStat;
+        preList = JSON.parse(localStorage.preList);
+    } else {
+        localStorage.setItem("globalSettings", JSON.stringify(globalSettings));
+    }
+} else {
+
+}
+//init
+var ARIA2 = Aria2(globalSettings);

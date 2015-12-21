@@ -8,13 +8,15 @@
 <body>
 <div>
     <div id="container" ng-app="taskPanel">
-        <div class="list-group" ng-controller="taskListController as taskListCtr">
-            <a href="#" class="list-group-item default" id="DPageLink">Manage</a>
+        <a href class="btn btn-sm" id="DPageLink">Manage</a>
+        <div class="list-group" id="list">
         </div>
     </div>
 </div>
 <script src="js/lib/jquery.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/jquery.jsonrpc.js"></script>
+<script src="js/lib/aria2.js"></script>
 <script src="js/popup.js"></script>
 </body>
 </html>
